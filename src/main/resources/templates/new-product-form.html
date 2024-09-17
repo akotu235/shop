@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{new-product-form.title}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/form :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <!--/*@thymesVar id="product" type="io.github.akotu235.shop.service.shop.projection.write.NewProductWriteModel"*/-->
+        <!--/*@thymesVar id="categories" type="java.util.List<github.akotu235.shop.service.shop.projection.read.CategoryReadModel>"*/-->
+        <!--/*@thymesVar id="category" type="io.github.akotu235.shop.service.shop.projection.read.CategoryReadModel"*/-->
+        <form th:action="@{/seller-panel/save-product}" th:object="${product}"
+              method="post" enctype="multipart/form-data" autocomplete="off">
+            <div id="form">
+                <h2 th:text="#{new-product-form.header}"></h2>
+                <label for="name" th:text="#{new-product-form.label.product-name}"></label>
+                <input th:placeholder="#{new-product-form.placeholder.product-name}"
+                       type="text" id="name" name="name" required
+                       th:field="*{name}" th:errorclass="incorrect-field">
+
+                <label for="photo" th:text="#{new-product-form.label.product-photo}">Upload Image:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" required
+                       th:field="*{photo}" th:errorclass="incorrect-field"/>
+
+                <label for="price" th:text="#{new-product-form.label.price}"></label>
+                <input th:placeholder="#{new-product-form.placeholder.price}"
+                       type="number" step="0.01" id="price" name="price" required
+                       th:field="*{price}" th:errorclass="incorrect-field">
+
+                <label for="availableQuantity" th:text="#{new-product-form.label.available-quantity}"></label>
+                <input th:placeholder="#{new-product-form.placeholder.available-quantity}"
+                       type="number" id="availableQuantity" name="availableQuantity" required
+                       th:field="*{availableQuantity}" th:errorclass="incorrect-field">
+
+                <label for="category" th:text="#{new-product-form.label.category-name}"></label>
+                <select id="category" name="category">
+                    <option th:each="category : ${categories}" th:value="${category.name}"
+                            th:text="${category.name}"></option>
+                </select>
+
+                <label for="description" th:text="#{new-product-form.label.description}"></label>
+                <textarea th:placeholder="#{new-product-form.placeholder.description}"
+                          id="description" name="description"
+                          th:field="*{description}" th:errorclass="incorrect-field"
+                          maxlength="511"></textarea>
+
+                <button class="form-button" th:text="#{new-product-form.button.submit}" type="submit"></button>
+            </div>
+            <p class="error-message" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></p>
+        </form>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
