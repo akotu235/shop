@@ -2,6 +2,8 @@ app:
   title: PrimeDeals
   url: https://localhost:9443
   data-path: data
+shop:
+  currency: PLN
 security:
   password:
     min-length: 3
