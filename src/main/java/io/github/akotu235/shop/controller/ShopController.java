@@ -8,7 +8,6 @@ import io.github.akotu235.shop.service.shop.projection.write.OrderPositionWriteM
 import io.github.akotu235.shop.service.shop.projection.write.ShippingDetailsWriteModel;
 import io.github.akotu235.shop.service.shop.validator.AddressValidator;
 import io.github.akotu235.shop.service.shop.validator.NewOrderPositionFormValidator;
-import io.github.akotu235.shop.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
@@ -30,13 +29,11 @@ public class ShopController {
     private final ShopService shopService;
     private final NewOrderPositionFormValidator newOrderPositionFormValidator;
     private final AddressValidator addressValidator;
-    private final UserService userService;
 
-    public ShopController(ShopService shopService, NewOrderPositionFormValidator newOrderPositionFormValidator, AddressValidator addressValidator, UserService userService) {
+    public ShopController(ShopService shopService, NewOrderPositionFormValidator newOrderPositionFormValidator, AddressValidator addressValidator) {
         this.shopService = shopService;
         this.newOrderPositionFormValidator = newOrderPositionFormValidator;
         this.addressValidator = addressValidator;
-        this.userService = userService;
     }
 
     @GetMapping("/")
