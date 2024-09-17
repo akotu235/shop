@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/form :: style}"></style>
+    <style th:replace="~{fragments/style/cart :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.OrderReadModel"*/-->
+        <div th:if="${cart.positions.isEmpty()}" th:text="#{cart.info.empty}"></div>
+        <div class="product-container"
+             th:classappend="${!position.product.enabled or position.quantity > position.product.availableQuantity ? 'error-border' : ''}"
+             th:each="position : ${cart.positions}">
+            <div class="product">
+                <a th:href="@{'/products/' + ${position.product.id}}" class="image-container">
+                    <img th:src="@{'/products/' + ${position.product.id} + '/photo/1'}" alt="photo"/>
+                </a>
+                <div class="info-container">
+                    <a th:href="@{'/products/' + ${position.product.id}}">
+                        <h2 th:text="${position.product.name}"></h2>
+                    </a>
+                    <div class="info-item">
+                        <label th:text="#{position.price} + ':'"></label>
+                        <span th:text="${position.totalPrice}"></span>
+                        <span th:text="${position.product.currency}"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="small price-per-unit"
+                              th:if="${position.quantity > 1}"
+                              th:text="'(' + ${position.product.price} + ' ' + #{position.per-unit} + ')'"></span>
+                    </div>
+                    <div class="info-item">
+                        <label th:text="#{product.quantity} + ':'"></label>
+                        <span th:text="${position.quantity}"></span>
+                    </div>
+                    <div class="info-item">
+                        <label th:text="#{product.category} + ':'"></label>
+                        <span class="hover-area">
+                                <a th:text="${position.product.category.name}"
+                                   th:href="@{'/?category=' + ${position.product.category.name}}"></a>
+                        </span>
+                    </div>
+                    <div class="button">
+                        <form th:action="@{'/cart/delete/' + ${position.product.id}}" method="post" autocomplete="off">
+                            <input name="productId" th:value="${position.product.id}" type="hidden"/>
+                            <button type="submit" th:text="#{cart.button.remove}"></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="errors"
+                 th:if="${cart.status == T(io.github.akotu235.shop.service.shop.entity.OrderStatus).PENDING}">
+                <div class="error-message" th:unless="${position.product.enabled}">
+                    <span th:text="#{product.disabled}"></span>
+                </div>
+                <div class="error-message"
+                     th:if="${position.quantity > position.product.availableQuantity && position.product.enabled}">
+                    <span th:text="#{product.available-quantity} + ':'"></span>
+                    <span th:text="${position.product.availableQuantity}"></span>
+                </div>
+            </div>
+        </div>
+        <div id="summary" th:unless="${cart.positions.isEmpty()}">
+            <div id="total-price">
+                <span class="secondary-color" th:text="#{cart.total-price}"></span>
+                <span th:text="${cart.cartPrice}"></span>
+                <span th:text="${cart.currency}"></span>
+            </div>
+            <a href="/order/set-delivery-method">
+                <button class="form-button" th:text="#{cart.button.checkout}"></button>
+            </a>
+        </div>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
