@@ -26,10 +26,9 @@ public class MessageConfig implements WebMvcConfigurer {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("lang");
+        messageSource.setBasenames("classpath:/lang");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setDefaultLocale(Locale.ENGLISH);
-        messageSource.getMessage("greeting", null, Locale.getDefault());
         String urlMessage = environment.getProperty("app.url");
         Properties properties = new Properties();
         properties.put("url.home", urlMessage);
