@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/product-preview :: style}"></style>
+    <style>
+        .small-input {
+            width: 50px;
+        }
+
+        .page-settings {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            padding: 34px 0;
+        }
+
+        .page-settings-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 21px;
+        }
+
+        @media (max-width: 768px) {
+            .page-settings {
+                flex-direction: column;
+                align-items: flex-end;
+                padding: 21px 0;
+            }
+
+            .page-settings-item {
+                margin: 5px;
+                flex-direction: row;
+            }
+
+            .page-settings button {
+                margin-top: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <form th:action="@{/}" th:object="${params}" method="get">
+            <input type="text" name="name" th:value="*{name}" th:placeholder="#{shop.search.placeholder}"/>
+            <input type="hidden" name="category" th:value="all"/>
+            <input type="hidden" name="page" value="0"/>
+            <input type="hidden" name="size" th:value="*{size}"/>
+            <input type="hidden" name="sortBy" th:value="*{sortBy}"/>
+            <input type="hidden" name="sortDirection" th:value="*{sortDirection}"/>
+            <button type="submit" th:text="#{shop.search.button}"></button>
+        </form>
+        <div class="centered">
+            <form action="#" th:action="@{/}" th:method="get" th:object="${params}">
+                <input type="hidden" name="category" th:value="*{category}"/>
+                <input type="hidden" name="name" th:value="*{name}"/>
+                <div class="page-settings">
+                    <div class="page-settings-item">
+                        <label for="sortBy" th:text="#{shop.page-settings.sort-by}"></label>
+                        <select id="sortBy" name="sortBy" th:field="*{sortBy}">
+                            <option value="name" th:text="#{shop.page-settings.sort-by.name}"></option>
+                            <option value="price" th:text="#{shop.page-settings.sort-by.price}"></option>
+                            <option value="category" th:text="#{shop.page-settings.sort-by.category}"></option>
+                        </select>
+                    </div>
+                    <div class="page-settings-item">
+                        <label for="sortDirection" th:text="#{shop.page-settings.sort-direction}"></label>
+                        <select id="sortDirection" name="sortDirection" th:field="*{sortDirection}">
+                            <option value="asc" th:text="#{shop.page-settings.sort-direction.asc}"></option>
+                            <option value="desc" th:text="#{shop.page-settings.sort-direction.desc}"></option>
+                        </select>
+                    </div>
+                    <div class="page-settings-item">
+                        <label for="size" th:text="#{shop.page-settings.page-size}"></label>
+                        <input class="small-input" type="number" id="size" name="size" min="1" max="20"
+                               th:value="*{size}" th:field="*{size}"/>
+                    </div>
+                    <!--                    <div>-->
+                    <!--                        <label for="page" th:text="#{shop.page-settings.page-number}"></label>-->
+                    <!--                        <input class="small-input" type="number" id="page" name="page" th:value="*{page}" min="0"-->
+                    <!--                               th:field="*{page}"/>-->
+                    <!--                    </div>-->
+                    <button type="submit" th:text="#{shop.page-settings.set.button}"></button>
+                </div>
+
+            </form>
+        </div>
+        <h2 th:unless="${params.category.equals('all')}" th:text="${params.category}"></h2>
+        <div th:each="product : ${page}">
+            <a th:href="@{'/products/' + ${product.id}}" class="product-container">
+                <div class="image-container">
+                    <img th:src="@{'/products/' + ${product.id} + '/photo/1'}" alt="photo"/>
+                </div>
+                <div class="info-container">
+                    <h2 th:text="${product.name}"></h2>
+                    <div class="info-item" th:unless="${product.enabled}">
+                        <label th:text="#{product.is-disabled}"></label>
+                    </div>
+                    <div class="info-item" th:if="${product.enabled}">
+                        <label th:text="#{product.price} + ':'"></label>
+                        <span th:text="${product.price}"></span>
+                        <span th:text="${product.currency}"></span>
+                    </div>
+                    <div class="info-item" th:if="${params.category == 'all' && product.enabled}">
+                        <label th:text="#{product.category} + ':'"></label>
+                        <span th:text="${product.category.name}"></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div th:if="${page.isEmpty()}" th:text="#{shop.no-products}"></div>
+
+        <div class="paging-buttons" th:if="${page.getTotalPages() > 1}">
+            <div class="paging-button">
+                <form th:action="@{/}" method="get">
+                    <input type="hidden" name="page" th:value="${page.getNumber() - 1}"/>
+                    <input type="hidden" name="name" th:value="${params.name}"/>
+                    <input type="hidden" name="category" th:value="${params.category}"/>
+                    <input type="hidden" name="size" th:value="${params.size}"/>
+                    <input type="hidden" name="sortBy" th:value="${params.sortBy}"/>
+                    <input type="hidden" name="sortDirection" th:value="${params.sortDirection}"/>
+                    <button type="submit" th:disabled="${page.getNumber() == 0}"><</button>
+                </form>
+            </div>
+            <div>
+                <span th:text="${page.getNumber() + 1}"></span>
+                <span th:text="#{page.of}"></span>
+                <span th:text="${page.getTotalPages()}"></span>
+            </div>
+            <div class="paging-button">
+                <form th:action="@{/}" method="get">
+                    <input type="hidden" name="page" th:value="${page.getNumber() + 1}"/>
+                    <input type="hidden" name="name" th:value="${params.name}"/>
+                    <input type="hidden" name="category" th:value="${params.category}"/>
+                    <input type="hidden" name="size" th:value="${params.size}"/>
+                    <input type="hidden" name="sortBy" th:value="${params.sortBy}"/>
+                    <input type="hidden" name="sortDirection" th:value="${params.sortDirection}"/>
+                    <button type="submit" th:disabled="${page.getNumber() == page.getTotalPages() - 1}">></button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
