@@ -1,3 +1,7 @@
+app:
+  title: PrimeDeals
+  url: https://localhost:9443
+  data-path: data
 spring:
   application:
     name: shop
