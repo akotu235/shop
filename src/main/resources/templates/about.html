@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <h3>About Us</h3>
+        <p>Lorem ipsum odor amet, consectetuer adipiscing elit. Justo penatibus cras at leo elit fames integer bibendum?
+            Sit aliquam augue tortor montes finibus fringilla. Viverra himenaeos potenti egestas, suspendisse magna
+            nibh. Aenean rutrum lacus sem porttitor libero curae. Nisl interdum est accumsan elit volutpat class
+            pellentesque. Blandit ut quam vehicula; bibendum curabitur laoreet. Nisl fermentum sem venenatis venenatis;
+            finibus lacinia tempus.
+
+            Neque nec sed varius proin nostra. Natoque ipsum malesuada molestie rhoncus lacus facilisis erat. Fusce
+            imperdiet venenatis ex phasellus nisi quisque efficitur elementum etiam. Auctor orci iaculis eleifend
+            habitant iaculis nam. Varius tempor ornare tincidunt; suspendisse molestie dapibus. Mi ultricies aenean eget
+            nulla fringilla. Sit laoreet penatibus justo; mollis tempor imperdiet fermentum dolor. Purus platea montes
+            rhoncus natoque quis velit conubia nec. Nullam ultricies sagittis sit primis pharetra fusce id.
+
+            Tempus egestas malesuada; eu suspendisse nam ad. Tellus augue fames fames egestas ultricies pharetra mus
+            ante in. Faucibus venenatis duis placerat sit egestas. Commodo nisi vestibulum diam cursus sit torquent
+            aptent nunc. Neque sodales elementum litora morbi imperdiet viverra vivamus. Nam pretium quis tellus
+            ultrices sociosqu blandit ornare. Mauris non fermentum tempus porttitor lacus.
+
+            Neque diam per integer et mi. Aliquet magna curae litora primis auctor quis. Et vel volutpat morbi rutrum
+            nibh. Inceptos diam justo aliquet donec enim leo tristique pharetra. Dignissim ullamcorper velit primis ad;
+            platea taciti phasellus. Ultrices semper mauris venenatis nullam potenti nulla nisl molestie. Ut pretium
+            quis sem quis penatibus iaculis.
+
+            Est nam vitae metus porta dui laoreet purus. Platea cursus fermentum convallis eget dis consectetur interdum
+            praesent. Eu dolor nascetur gravida senectus pellentesque phasellus fusce! Ante curae integer parturient
+            turpis felis quam praesent justo. Faucibus mattis donec congue tristique facilisis sodales iaculis primis.
+            Ante pretium nulla tristique penatibus vivamus. At suscipit habitant lorem vehicula phasellus orci consequat
+            felis. Quisque sem dictum ut venenatis placerat curae erat semper.
+
+            Alobortis et dignissim himenaeos ligula elementum fusce. Nisl sit ornare volutpat litora senectus, sed
+            nullam. Penatibus felis maecenas nisl lorem suspendisse auctor; magnis fringilla. Quisque sagittis himenaeos
+            faucibus lectus eleifend. Pharetra mi class ante rhoncus fermentum blandit commodo ante. Nec proin molestie
+            arcu sollicitudin pulvinar; magnis lobortis.
+
+            Nec orci himenaeos in curabitur cursus. Volutpat tincidunt ex diam eros nascetur amet. At dapibus sapien
+            turpis vivamus porta fames suspendisse mollis dis. Class fusce torquent sodales massa vulputate cras class.
+            Mollis fames orci sed maximus dictum velit habitant nullam elementum. Penatibus integer molestie ut mattis
+            ipsum quis leo. Vivamus gravida diam adipiscing in facilisis imperdiet nibh augue netus. Habitant fames
+            risus odio suscipit montes, imperdiet viverra.
+
+            Curabitur placerat himenaeos condimentum metus ornare himenaeos. Odio phasellus eu accumsan molestie; eget
+            phasellus neque. Nisl leo volutpat class; orci neque ipsum. Non quisque taciti sit volutpat odio senectus.
+            Mi magna rutrum senectus libero inceptos sagittis. Eleifend sagittis elementum mi ultricies viverra
+            elementum. Elit bibendum donec tempor tristique curae maximus erat vehicula.</p>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>

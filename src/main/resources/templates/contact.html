@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <h3>Contact</h3>
+
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
