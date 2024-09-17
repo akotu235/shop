@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{new-category-form.title}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/form :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <form th:action="@{/payments/process}" th:object="${paymentRequest}" method="post">
+            <div id="form">
+                <h2 th:text="#{payment.header}"></h2>
+                <table>
+                    <tr>
+                        <td class="secondary-color" th:text="#{payment.amount}"></td>
+                        <td th:text="*{amount}"></td>
+                    </tr>
+                    <tr>
+                        <td class="secondary-color" th:text="#{payment.currency}"></td>
+                        <td th:text="*{currency}"></td>
+                    </tr>
+                </table>
+                <input type="hidden" id="amount" th:field="*{amount}" step="0.01" required/>
+                <input type="hidden" id="currency" th:field="*{currency}" required/>
+                <input type="hidden" id="orderId" th:field="*{orderId}" required/>
+                <button class="form-button" type="submit" th:text="#{payment.button.submit}"></button>
+            </div>
+            <p class="error-message" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></p>
+        </form>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
