@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/buttons :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <div id="buttons">
+            <a href="seller-panel/new-product">
+                <button th:text="#{seller-panel.button.add-product}"></button>
+            </a>
+            <a href="seller-panel/new-category">
+                <button th:text="#{seller-panel.button.add-category}"></button>
+            </a>
+            <a href="/seller-panel/orders">
+                <button th:text="#{seller-panel.button.orders}"></button>
+            </a>
+        </div>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
