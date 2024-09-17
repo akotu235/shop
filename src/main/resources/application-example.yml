@@ -4,6 +4,15 @@ app:
   data-path: data
 shop:
   currency: PLN
+  delivery:
+    price:
+      express: 20.
+      standard: 13.5
+      pickup: 0.
+    waiting-days:
+      express: 3
+      standard: 5
+      pickup: 0
 security:
   password:
     min-length: 3
