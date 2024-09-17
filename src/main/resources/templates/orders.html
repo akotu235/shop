@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style>
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            width: 20%;
+        }
+
+        @media (max-width: 768px) {
+            td {
+                padding: 10px 5px;
+            }
+
+            #orders-status-form {
+                padding: 21px 0;
+            }
+
+            #orders-status-form label {
+                margin: 0;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <form id="orders-status-form" th:action="@{/seller-panel/orders}" method="post">
+            <label for="status" th:text="#{seller-panel.label.status}"></label>
+            <select id="status" name="status">
+                <option th:each="status : ${T(io.github.akotu235.shop.service.shop.entity.OrderStatus).values()}"
+                        th:value="${status.name()}"
+                        th:text="${status.name()}">
+                </option>
+            </select>
+            <button class="form-button" type="submit" th:text="#{seller-panel.button.orders}"></button>
+        </form>
+        <h2 th:text="#{seller.orders.header}"></h2>
+        <table>
+            <tr>
+                <th th:text="#{seller.orders.th.id}"></th>
+                <th th:text="#{seller.orders.th.status}"></th>
+                <th th:text="#{seller.orders.th.date}"></th>
+                <th th:text="#{seller.orders.th.price}"></th>
+                <th></th>
+            </tr>
+            <tr th:each="order : ${orders}">
+                <td>
+                    <span th:text="${order.id}"></span>
+                </td>
+                <td th:text="${order.status}"></td>
+                <td th:text="${order.submissionDate}"></td>
+                <td>
+                    <span th:text="${order.totalPrice}"></span>
+                    <span th:text="${order.currency}"></span>
+                </td>
+                <td>
+                    <a th:href="@{'/seller-panel/orders/' + ${order.id}}">
+                        <button th:text="#{seller.orders.button.show-details}"></button>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
