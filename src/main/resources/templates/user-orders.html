@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style>
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            width: 20%;
+        }
+
+        @media (max-width: 768px) {
+            td{
+                padding: 10px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <h2 th:text="#{user.orders-history.header}"></h2>
+        <table>
+            <tr>
+                <th th:text="#{user.orders-history.th.id}"></th>
+                <th th:text="#{user.orders-history.th.status}"></th>
+                <th th:text="#{user.orders-history.th.date}"></th>
+                <th th:text="#{user.orders-history.th.price}"></th>
+                <th></th>
+            </tr>
+            <tr th:each="order : ${orders}">
+                <td>
+                    <span th:text="${order.id}"></span>
+                </td>
+                <td th:text="${order.status}"></td>
+                <td th:text="${order.submissionDate}"></td>
+                <td>
+                    <span th:text="${order.totalPrice}"></span>
+                    <span th:text="${order.currency}"></span>
+                </td>
+                <td><a th:href="@{'/user/' + ${username} + '/orders/' + ${order.id}}"><button th:text="#{user.order-history.button.show-details}"></button></a></td>
+            </tr>
+        </table>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
