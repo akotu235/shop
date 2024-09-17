@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/product :: style}"></style>
+    <style th:replace="~{fragments/style/form :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <div class="container">
+            <div id="product-container">
+                <div class="image-container">
+                    <img th:src="@{'/products/' + ${product.id} + '/photo/1'}" alt="photo"/>
+                </div>
+                <div class="info-container">
+                    <h2 th:text="${product.name}"></h2>
+                    <div class="info-item" th:unless="${product.enabled}">
+                        <label th:text="#{product.is-disabled}"></label>
+                    </div>
+                    <div class="info-item" th:if="${product.enabled}">
+                        <label th:text="#{product.price} + ':'"></label>
+                        <span th:text="${product.price}"></span>
+                        <span th:text="${product.currency}"></span>
+                    </div>
+                    <div class="info-item" th:if="${product.enabled}">
+                        <label th:text="#{product.available-quantity} + ':'"></label>
+                        <span th:text="${product.availableQuantity}"></span>
+                    </div>
+                    <div class="form-container">
+                        <div sec:authorize="hasRole('USER')" th:if="${product.enabled}">
+                            <form th:action="@{/cart/add}" method="post" th:object="${position}" autocomplete="off">
+                                <div id="form">
+                                    <input th:field="*{orderId}"
+                                           th:value="${cart.id}" type="hidden"/>
+                                    <input th:field="*{productId}"
+                                           th:value="${product.id}" type="hidden"/>
+                                    <label for="quantity" th:text="#{add-position-form.add.label.quantity}"></label>
+                                    <input th:field="*{quantity}"
+                                           min="1" th:max="${product.availableQuantity}"
+                                           type="number" id="quantity" name="quantity" value="1" required
+                                           th:placeholder="#{add-position-form.add.placeholder.quantity}"
+                                           th:errorclass="incorrect-field">
+                                    <button class="form-button" th:text="#{add-position-form.button.add}"
+                                            type="submit"></button>
+                                </div>
+                                <p class="error-message" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></p>
+                            </form>
+                        </div>
+                        <div sec:authorize="isAnonymous()" class="anonymous-user-info">
+                            <div>
+                                <a href="/login" th:text="#{user.anonymous.info.login}"></a>
+                                <span th:text="#{user.anonymous.info.or}"></span>
+                                <a th:text="#{user.anonymous.info.sign-up}" href="/register"></a>
+                            </div>
+                            <div>
+                                <span th:text="#{user.anonymous.info.to}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div sec:authorize="hasRole('SELLER')" class="seller-container">
+                    <a th:if="${product.enabled}" th:href="@{'/seller-panel/disable-product/' + ${product.id}}">
+                        <button th:text="#{product.disable}"></button>
+                    </a>
+                    <a th:unless="${product.enabled}" th:href="@{'/seller-panel/enable-product/' + ${product.id}}">
+                        <button th:text="#{product.enable}"></button>
+                    </a>
+                </div>
+            </div>
+            <div id="description-container">
+                <div th:text="${product.description}"></div>
+            </div>
+        </div>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
