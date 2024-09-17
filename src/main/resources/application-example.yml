@@ -2,6 +2,11 @@ app:
   title: PrimeDeals
   url: https://localhost:9443
   data-path: data
+security:
+  password:
+    min-length: 3
+    require-uppercase: false
+    require-numeric: false
 spring:
   application:
     name: shop
