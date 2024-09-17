@@ -40,4 +40,4 @@ build/
 /src/main/resources/application.yml
 
 ### DATA ###
-/data/**
+data
