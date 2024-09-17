@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style>
+        #order-table {
+            width: 100%;
+        }
+
+        #order-table td {
+            padding: 10px;
+            text-align: center;
+            width: 25%;
+        }
+
+        .name-cell {
+            text-align: left !important;
+        }
+
+        .info {
+            padding: 21px;
+            font-size: 34px;
+        }
+
+        #total-price {
+            padding: 21px;
+            font-size: 34px;
+        }
+
+        @media (max-width: 768px) {
+            #total-price {
+                padding: 20px 0;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <h2 th:text="#{order.header}"></h2>
+        <div class="centered">
+            <div class="info">
+                <span class="secondary-color" th:text="#{order.status}"></span>
+                <span th:text="${order.status}"></span>
+                <form sec:authorize="hasRole('SELLER')" th:if="${statuses}" th:action="@{/seller-panel/orders/{orderId}/updateStatus(orderId=${order.id})}" th:object="${order}" method="post">
+                    <label th:text="#{seller-panel.label.set-status}"></label>
+                    <select name="status">
+                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+                    </select>
+                    <button type="submit" th:text="#{seller-panel.button.set-status}"></button>
+                </form>
+            </div>
+        </div>
+        <table id="order-table">
+            <tr>
+                <th th:text="#{order.th.product-name}"></th>
+                <th th:text="#{order.th.quantity}"></th>
+                <th th:text="#{order.th.unit-price}"></th>
+                <th th:text="#{order.th.item-total-price}"></th>
+            </tr>
+            <tr th:each="position : ${order.positions}">
+                <td class="name-cell">
+                    <span th:text="${position.product.name}"></span>
+                </td>
+                <td th:text="${position.quantity}"></td>
+                <td>
+                    <span th:text="${position.product.price}"></span>
+                    <span th:text="${order.currency}"></span>
+                </td>
+                <td>
+                    <span th:text="${position.totalPrice}"></span>
+                    <span th:text="${order.currency}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="name-cell">
+                    <span th:text="#{order.delivery-method}"></span>
+                    <span th:text="#{${order.deliveryOption.translationCode}}"></span>
+                </td>
+                <td>1</td>
+                <td>
+                    <span th:text="${order.deliveryOption.formattedPrice}"></span>
+                    <span th:text="${order.currency}"></span>
+                </td>
+                <td>
+                    <span th:text="${order.deliveryOption.formattedPrice}"></span>
+                    <span th:text="${order.currency}"></span>
+                </td>
+            </tr>
+        </table>
+        <div class="centered">
+            <div id="total-price">
+                <span class="secondary-color" th:text="#{order.total-price}"></span>
+                <span th:text="${order.totalPrice}"></span>
+                <span th:text="${order.currency}"></span>
+            </div>
+        </div>
+        <h2 th:text="#{shipping-details.header}"></h2>
+        <div th:if="${order.deliveryOption.pickup}" th:text="#{order.personal-pickup}"></div>
+        <table>
+            <tr>
+                <td><label th:text="#{shipping-details.label.recipient-name}"></label></td>
+                <td th:text="${order.recipientName}"></td>
+            </tr>
+            <tr th:unless="${order.deliveryOption.pickup}">
+                <td><label th:text="#{shipping-details.label.country}"></label></td>
+                <td th:text="${order.shippingDetails.country}"></td>
+            </tr>
+            <tr th:unless="${order.deliveryOption.pickup}">
+                <td><label th:text="#{shipping-details.label.city}"></label></td>
+                <td th:text="${order.shippingDetails.city}"></td>
+            </tr>
+            <tr th:unless="${order.deliveryOption.pickup}">
+                <td><label th:text="#{shipping-details.label.street}"></label></td>
+                <td th:text="${order.shippingDetails.street}"></td>
+            </tr>
+            <tr th:unless="${order.deliveryOption.pickup}">
+                <td><label th:text="#{shipping-details.label.postal-code}"></label></td>
+                <td th:text="${order.shippingDetails.postalCode}"></td>
+            </tr>
+            <tr th:unless="${order.deliveryOption.pickup}">
+                <td><label th:text="#{shipping-details.label.phone}"></label></td>
+                <td th:text="${order.shippingDetails.phone}"></td>
+            </tr>
+        </table>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
