@@ -27,7 +27,16 @@ spring:
           starttls:
             enable: true
 server:
-  port: 880
+  port.http: 980
+  port: 9443
+  ssl:
+    enabled: true
+    key-alias: tomcat-shop
+    key-password: "key-pass"
+    key-store: classpath:ssl/key.jks
+    key-store-provider: SUN
+    key-store-type: JKS
+    key-store-password: "key-store-pass"
   error:
     include-binding-errors: always
   servlet:
