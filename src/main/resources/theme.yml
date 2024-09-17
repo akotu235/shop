@@ -1,0 +1,19 @@
+classic:
+  primary: '#0069d9'
+  secondary: '#11559c'
+  background: '#f1f1f1'
+  font: '#333333'
+  highlighted: '#000000'
+  button-font: '#ffffff'
+  header-font: '#bebebe'
+  header-highlighted-font: '#ffffff'
+
+dark:
+  primary: '#0069d9'
+  secondary: '#11559c'
+  background: '#1f1f1f'
+  font: '#bebebe'
+  highlighted: '#ffffff'
+  button-font: '#ffffff'
+  header-font: '#bebebe'
+  header-highlighted-font: '#ffffff'
