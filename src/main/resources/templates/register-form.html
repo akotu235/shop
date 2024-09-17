@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{registration.title}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/form :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <form th:action="@{/register}" method="post" th:object="${user}" autocomplete="off">
+            <div id="form">
+                <h2 th:text="#{registration.header}"></h2>
+                <label for="username" th:text="#{registration.label.username}"></label>
+                <input th:placeholder="#{registration.placeholder.username}"
+                       type="text" id="username" name="username" required
+                       th:field="*{username}" th:errorclass="incorrect-field">
+                <label for="name" th:text="#{registration.label.name}"></label>
+                <input th:placeholder="#{registration.placeholder.name}"
+                       type="text" id="name" name="name" required
+                       th:field="*{name}" th:errorclass="incorrect-field">
+                <label for="surname" th:text="#{registration.label.surname}"></label>
+                <input th:placeholder="#{registration.placeholder.surname}"
+                       type="text" id="surname" name="surname" required
+                       th:field="*{surname}" th:errorclass="incorrect-field">
+                <label for="email" th:text="#{registration.label.email}"></label>
+                <input th:placeholder="#{registration.placeholder.email}"
+                       type="text" id="email" name="email" required
+                       th:field="*{email}" th:errorclass="incorrect-field">
+                <label for="password" th:text="#{registration.label.password}"></label>
+                <input th:placeholder="#{registration.placeholder.password}"
+                       type="password" id="password" name="password" required
+                       th:field="*{password}" th:errorclass="incorrect-field" autocomplete="new-password">
+                <label for="confirmPassword" th:text="#{registration.label.confirm-password}"></label>
+                <input th:placeholder="#{registration.placeholder.confirm-password}"
+                       type="password" id="confirmPassword" name="confirmPassword" required
+                       th:field="*{confirmPassword}" th:errorclass="incorrect-field" autocomplete="new-password">
+                <button class="form-button" th:text="#{registration.button.submit}" type="submit"></button>
+            </div>
+            <p class="error-message" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></p>
+        </form>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
