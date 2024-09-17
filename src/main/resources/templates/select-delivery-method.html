@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{new-product-form.title}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/form :: style}"></style>
+    <style>
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            width: 33%;
+        }
+
+        label {
+            margin: 21px 0 13px 0;
+        }
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <div class="centered">
+            <h2 th:text="#{delivery.header}"></h2>
+            <label th:text="#{delivery.table.label}"></label>
+        </div>
+        <table>
+            <tr>
+                <th th:text="#{delivery.th.name}"></th>
+                <th th:text="#{delivery.th.price}"></th>
+                <th th:text="#{delivery.th.waiting-days}"></th>
+            </tr>
+            <tr th:each="method : ${deliveryOptions}">
+                <td th:text="#{${method.translationCode}}"></td>
+                <td>
+                    <span th:text="${method.formattedPrice}"></span>
+                    <span th:text="${cart.currency}"></span>
+                </td>
+                <td th:text="${method.waitingDays}"></td>
+            </tr>
+        </table>
+        <form th:action="@{/order/set-delivery-method}" th:object="${delivery}" method="post">
+            <label for="deliveryMethod" th:text="#{delivery.label}"></label>
+            <select id="deliveryMethod" th:field="*{deliveryMethod}">
+                <option value="" disabled th:text="#{delivery.select-method}"></option>
+                <option th:each="option : ${deliveryOptions}"
+                        th:value="${option.deliveryMethod}"
+                        th:text="#{${option.translationCode}}">
+                </option>
+            </select>
+            <button class="form-button" type="submit" th:text="#{delivery.button.submit}"></button>
+        </form>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
