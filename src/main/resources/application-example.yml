@@ -15,6 +15,17 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: akotu.mywire@gmail.com
+    password: 'password'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 880
   error:
