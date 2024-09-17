@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{new-category-form.title}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/form :: style}"></style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <form th:action="@{/order/set-shipping-address}" th:object="${shippingDetails}" method="post">
+            <div id="form">
+                <h2 th:text="#{shipping-details.header}"></h2>
+                <label for="country" th:text="#{shipping-details.label.country}"></label>
+                <input th:placeholder="#{shipping-details.placeholder.country}"
+                       th:field="*{country}" type="text" id="country"
+                       th:errorclass="incorrect-field"
+                       readonly required/>
+
+                <label for="city" th:text="#{shipping-details.label.city}"></label>
+                <input th:placeholder="#{shipping-details.placeholder.city}"
+                       th:field="*{city}" type="text" id="city"
+                       th:errorclass="incorrect-field" required/>
+
+                <label for="address" th:text="#{shipping-details.label.street}"></label>
+                <input th:placeholder="#{shipping-details.placeholder.street}"
+                th:field="*{street}" type="text" id="address"
+                th:errorclass="incorrect-field" required/>
+
+                <label for="postalCode" th:text="#{shipping-details.label.postal-code}"></label>
+                <input th:placeholder="#{shipping-details.placeholder.postal-code}"
+                       th:field="*{postalCode}" type="text" id="postalCode"
+                       th:errorclass="incorrect-field" required/>
+
+                <label for="phone" th:text="#{shipping-details.label.phone}"></label>
+                <input th:placeholder="#{shipping-details.placeholder.phone}"
+                       th:field="*{phone}" type="text" id="phone"
+                       th:errorclass="incorrect-field" required/>
+
+                <button class="form-button" th:text="#{shipping-details.button.submit}" type="submit"></button>
+            </div>
+            <p class="error-message" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></p>
+        </form>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
