@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{result}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style>
+        .success-message, .error-message {
+            border-radius: 10px;
+            box-shadow: 5px 5px 5px black;
+            padding: 20px;
+            margin: 50px;
+            text-align: center;
+        }
+
+        .success-message {
+            background-color: #39a27523;
+            border: 2px solid #39a275;
+            color: #39a275;
+        }
+
+        .error-message {
+            background-color: #ff696123;
+            border: 2px solid #ff6961;
+            color: #ff6961;
+        }
+
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div id="content">
+    <aside></aside>
+    <main>
+        <div th:if="${result.success}" class="success-message">
+            <p th:id="msg" th:text="${#messages.msgWithParams(result.messageCode, result.args)}"></p>
+        </div>
+        <div th:unless="${result.success}" class="error-message">
+            <p th:id="msg" th:text="${#messages.msgWithParams(result.messageCode, result.args)}"></p>
+        </div>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
