@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: shop
+  main:
+    banner-mode: off
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:./data/db;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+server:
+  port: 880
+  error:
+    include-binding-errors: always
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
