@@ -1,0 +1,13 @@
+<nav xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <div id="sideMenu" class="side-menu">
+        <a sec:authorize="hasRole('SELLER')" href="/seller-panel" th:text="#{nav.seller-panel}"></a>
+        <a href="/categories" th:text="#{nav.product-categories}"></a>
+        <a href="/about" th:text="#{nav.about-us}"></a>
+        <a href="/contact" th:text="#{nav.contact}"></a>
+        <br>
+        <a href="/register" th:unless="${#authorization.expression('isAuthenticated()')}" th:utext="#{header.register}"></a>
+        <a href="/login" th:unless="${#authorization.expression('isAuthenticated()')}" th:utext="#{header.login}"></a>
+        <a th:href="@{'/logout'}" th:if="${#authorization.expression('isAuthenticated()')}" th:text="#{header.logout}"></a>
+        <a th:href="@{'/user/' + ${#authentication.name}}" th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.name}"></a>
+    </div>
+</nav>

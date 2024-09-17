@@ -1,0 +1,6 @@
+<a id="cart" class="header-element" href="/cart">
+    <div th:if="${cart != null}" id="cart-badge" th:text="${cart.size}"></div>
+    <div class="header-ico">
+        <svg th:replace="~{fragments/icon/cart :: svg}"></svg>
+    </div>
+</a>

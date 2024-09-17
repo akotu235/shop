@@ -1,0 +1,43 @@
+<!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.OrderReadModel"*/-->
+<header id="header">
+    <div class="header-logo">
+        <a href="/"><h1 class="header-element" th:text="${@environment.getProperty('app.title')}"></h1></a>
+    </div>
+    <nav th:replace="~{fragments/nav :: nav}"></nav>
+    <div id="header-user">
+        <div class="row-direction" th:if="${#authorization.expression('isAuthenticated()')}">
+            <a th:replace="~{fragments/cart-button :: a}"></a>
+            <div>
+                <a href="/logout">
+                    <div class="header-element" th:text="#{header.logout}"></div>
+                </a>
+                <a th:href="@{'/user/' + ${#authentication.name}}">
+                    <div class="header-element" th:text="${#authentication.name}"></div>
+                </a>
+            </div>
+        </div>
+        <div class="row-direction" th:unless="${#authorization.expression('isAuthenticated()')}">
+            <a href="/register">
+                <div class="header-element" th:utext="#{header.register}"></div>
+            </a>
+            <span>&nbsp;/&nbsp;</span>
+            <a href="/login">
+                <div class="header-element" th:utext="#{header.login}"></div>
+            </a>
+        </div>
+    </div>
+</header>
+<header id="header-mobile">
+    <div class="header-logo">
+        <a href="/"><h1 class="header-element" th:text="${@environment.getProperty('app.title')}"></h1></a>
+    </div>
+    <div th:replace="~{fragments/mobile-nav :: nav}"></div>
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <a th:replace="~{fragments/cart-button :: a}"></a>
+    </div>
+    <div class="header-element" id="menu-button" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</header>

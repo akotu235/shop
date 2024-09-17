@@ -1,0 +1,24 @@
+<!--/*@thymesVar id="categories" type="java.util.List<io.github.akotu235.shop.service.shop.projection.read.CategoryReadModel>"*/-->
+<!--/*@thymesVar id="category" type="io.github.akotu235.shop.service.shop.projection.read.CategoryReadModel"*/-->
+<nav xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <ul class="menu">
+        <li class="dropdown" sec:authorize="hasRole('SELLER')">
+            <a href="/seller-panel" class="dropbtn" th:text="#{nav.seller-panel}"></a>
+            <ul class="dropdown-content">
+                <li><a href="/seller-panel/new-product" th:text="#{nav.seller-panel.add-product}"></a></li>
+                <li><a href="/seller-panel/new-category" th:text="#{nav.seller-panel.add-category}"></a></li>
+                <li><a href="/seller-panel/orders" th:text="#{nav.seller-panel.orders}"></a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="/categories" class="dropbtn" th:text="#{nav.product-categories}"></a>
+            <ul class="dropdown-content">
+                <li th:each="category : ${categories}">
+                    <a th:text="${category.name}" th:href="@{'/?category=' + ${category.name}}"></a>
+                </li>
+            </ul>
+        </li>
+        <li><a href="/about" th:text="#{nav.about-us}"></a></li>
+        <li><a href="/contact" th:text="#{nav.contact}"></a></li>
+    </ul>
+</nav>
