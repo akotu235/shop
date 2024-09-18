@@ -8,6 +8,7 @@ import io.github.akotu235.shop.service.shop.projection.write.OrderPositionWriteM
 import io.github.akotu235.shop.service.shop.projection.write.ShippingDetailsWriteModel;
 import io.github.akotu235.shop.service.shop.validator.AddressValidator;
 import io.github.akotu235.shop.service.shop.validator.NewOrderPositionFormValidator;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
 public class ShopController {
@@ -43,6 +44,7 @@ public class ShopController {
                                  @RequestParam(defaultValue = "4") int size,
                                  @RequestParam(defaultValue = "name") String sortBy,
                                  @RequestParam(defaultValue = "asc") String sortDirection,
+                                 HttpSession session,
                                  Model model) {
         if (size > 20) {
             size = 20;
@@ -57,7 +59,9 @@ public class ShopController {
         } else {
             model.addAttribute("page", shopService.getAllProducts(pageable));
         }
-        model.addAttribute("params", new RequestParamsReadModel(name, category, page, size, sortBy, sortDirection));
+        RequestParamsReadModel requestParams = new RequestParamsReadModel(name, category, page, size, sortBy, sortDirection);
+        model.addAttribute("params", requestParams);
+        session.setAttribute("params", requestParams);
         return "shop";
     }
 
@@ -92,14 +96,24 @@ public class ShopController {
     public String addToCart(@ModelAttribute("position") @Valid OrderPositionWriteModel position,
                             BindingResult bindingResult,
                             Authentication authentication,
-                            RedirectAttributes redirectAttributes) {
+                            HttpSession session) {
         newOrderPositionFormValidator.validate(position, bindingResult);
         if (!bindingResult.hasErrors()) {
             shopService.addOrderPosition(position, authentication);
         }
         position.setQuantity(1);
-        redirectAttributes.addFlashAttribute("position", position);
-        return "redirect:/products/" + position.getProductId();
+        RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
+        if (requestParams == null) {
+            return "redirect:/";
+        }
+        return "redirect:" + UriComponentsBuilder.fromPath("/")
+                .queryParam("page", requestParams.getPage())
+                .queryParam("name", requestParams.getName())
+                .queryParam("category", requestParams.getCategory())
+                .queryParam("size", requestParams.getSize())
+                .queryParam("sortBy", requestParams.getSortBy())
+                .queryParam("sortDirection", requestParams.getSortDirection())
+                .toUriString();
     }
 
     @PostMapping("/cart/{productId}/set-quantity")
