@@ -154,8 +154,14 @@
         flex-direction: column;
     }
 
-    .small {
-        font-size: 12px;
+    .row-direction{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .column-direction{
+        display: flex;
+        flex-direction: column;
     }
 
     @media (max-width: 768px) {
@@ -168,10 +174,8 @@
             padding: 30px
         }
 
-        @media (max-width: 768px) {
-            table {
-                font-size: 12px;
-            }
+        table {
+            font-size: 12px;
         }
     }
 </style>

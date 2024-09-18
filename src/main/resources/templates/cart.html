@@ -29,13 +29,16 @@
                     </a>
                     <div class="info-item">
                         <label th:text="#{position.price} + ':'"></label>
-                        <span th:text="${position.totalPrice}"></span>
-                        <span th:text="${position.product.currency}"></span>
-                    </div>
-                    <div class="info-item">
-                        <span class="small price-per-unit"
-                              th:if="${position.quantity > 1}"
-                              th:text="'(' + ${position.product.price} + ' ' + #{position.per-unit} + ')'"></span>
+                        <div class="column-direction">
+                            <div class="row-direction">
+                                <span th:text="${position.totalPrice}"></span>
+                                <span th:text="${position.product.currency}"></span>
+                            </div>
+                            <div class="row-direction" th:if="${position.quantity > 1}">
+                                <span class="small price-per-unit"
+                                      th:text="'(' + ${position.product.price} + ' ' + #{position.per-unit} + ')'"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="info-item">
                         <label th:text="#{product.quantity} + ':'"></label>
