@@ -74,12 +74,12 @@ public class ProductService {
         throw new InvalidAddressException("error.product.not-exist", String.valueOf(id));
     }
 
-    public Product setEnableProduct(Long productId, boolean enable) {
+    public void setEnableProduct(Long productId, boolean enable) {
         Optional<Product> productOptional = productRepository.findProductById(productId);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
             product.setEnabled(enable);
-            return productRepository.save(product);
+            productRepository.save(product);
         } else throw new InvalidAddressException("error.product.not-exist", String.valueOf(productId));
     }
 

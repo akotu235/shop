@@ -41,7 +41,7 @@ public class OrderValidator implements Validator {
             if (productOptional.isPresent()) {
                 Product product = productOptional.get();
                 if (position.getQuantity() > product.getAvailableQuantity()) {
-                    errors.rejectValue("positions", "error.order-position", messageSource.getMessage("error.order-position.quantity", null, userLocale));
+                    errors.rejectValue("positions", "error.order-position", messageSource.getMessage("error.order-position.quantity", new Object[]{product.getAvailableQuantity()}, userLocale));
                 }
 
                 if(!position.getProduct().isEnabled()){

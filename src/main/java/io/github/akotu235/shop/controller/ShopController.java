@@ -83,7 +83,8 @@ public class ShopController {
     }
 
     @GetMapping("/cart")
-    public String getCart() {
+    public String getCart(Authentication authentication, Model model) {
+        model.addAttribute("cart", shopService.getCart(authentication));
         return "cart";
     }
 
@@ -137,7 +138,7 @@ public class ShopController {
 
     @GetMapping("/order/summary")
     public String getOrderSummary(Model model, Authentication authentication) {
-        model.addAttribute("order", shopService.getCart(authentication));
+        model.addAttribute("order", shopService.getOrderSummary(authentication));
         return "order-summary";
     }
 

@@ -48,7 +48,7 @@ public class NewOrderPositionFormValidator implements Validator {
                 errors.rejectValue("productId", "error.order-position", messageSource.getMessage("error.order-position.product-not-exist", null, userLocale));
             } else {
                 if (productOptional.get().getAvailableQuantity() < orderPositionWriteModel.getQuantity() || orderPositionWriteModel.getQuantity() < 1) {
-                    errors.rejectValue("quantity", "error.order-position", messageSource.getMessage("error.order-position.quantity", null, userLocale));
+                    errors.rejectValue("quantity", "error.order-position", messageSource.getMessage("error.order-position.quantity", new Object[]{productOptional.get().getAvailableQuantity()}, userLocale));
                 }
             }
         }

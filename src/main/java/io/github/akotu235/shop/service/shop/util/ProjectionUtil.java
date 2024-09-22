@@ -26,8 +26,17 @@ public class ProjectionUtil {
         return products.map(ProjectionUtil::getProductReadModel);
     }
 
-    public static OrderReadModel getOrderReadModel(Order order, List<OrderPositionReadModel> orderPositions, double cartPrice, double totalPrice, String currency, DeliveryOptionReadModel deliveryOption, ShippingDetailsReadModel shippingDetails) {
-        return new OrderReadModel(order.getId(), order.getUser().getId(), order.getUser().getName() + " " + order.getUser().getSurname(), orderPositions, order.getStatus(), deliveryOption, shippingDetails, FormatUtils.formatPrice(cartPrice), FormatUtils.formatPrice(totalPrice), currency, orderPositions.size(), FormatUtils.formatDate(order.getSubmissionDate()));
+    public static OrderReadModel getOrderReadModel(Order order, double cartPrice, double totalPrice, String currency, DeliveryOptionReadModel deliveryOption, ShippingDetailsReadModel shippingDetails) {
+        List<OrderPositionReadModel> positions = getOrderPositionsReadModel(order);
+        return new OrderReadModel(order.getId(), order.getUser().getId(), order.getUser().getName() + " " + order.getUser().getSurname(), positions, order.getStatus(), deliveryOption, shippingDetails, FormatUtils.formatPrice(cartPrice), FormatUtils.formatPrice(totalPrice), currency, positions.size(), FormatUtils.formatDate(order.getSubmissionDate()));
+    }
+
+    public static List<OrderPositionReadModel> getOrderPositionsReadModel(Order order) {
+        return order.getPositions().stream().map(orderPosition -> ProjectionUtil.getOrderPositionReadModel(orderPosition, orderPosition.getQuantity() * orderPosition.getProduct().getPrice())).toList();
+    }
+
+    public static CartReadModel getCartReadModel(Order order, List<CartPositionReadModel> positions, double cartPrice, String currency, boolean hasError) {
+        return new CartReadModel(order.getId(), order.getUser().getId(), positions, order.getStatus(), FormatUtils.formatPrice(cartPrice), currency, positions.size(), hasError);
     }
 
     public static OrderPositionReadModel getOrderPositionReadModel(OrderPosition position, double totalPrice) {

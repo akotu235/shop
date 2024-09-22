@@ -14,10 +14,9 @@
 <div id="content">
     <aside></aside>
     <main>
-        <!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.OrderReadModel"*/-->
-        <div th:if="${cart.positions.isEmpty()}" th:text="#{cart.info.empty}"></div>
+        <!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.CartReadModel"*/-->
         <div class="product-container"
-             th:classappend="${!position.product.enabled or position.quantity > position.product.availableQuantity ? 'error-border' : ''}"
+             th:classappend="${position.hasError ? 'error-border' : ''}"
              th:each="position : ${cart.positions}">
             <div class="product">
                 <a th:href="@{'/products/' + ${position.product.id}}" class="image-container">
@@ -46,9 +45,10 @@
                     </div>
                     <div class="info-item">
                         <label th:text="#{product.category} + ':'"></label>
-                        <span class="hover-area">
-                                <a th:text="${position.product.category.name}"
-                                   th:href="@{'/?category=' + ${position.product.category.name}}"></a>
+                        <span>
+                            <a class="hover-area"
+                               th:text="${position.product.category.name}"
+                               th:href="@{'/?category=' + ${position.product.category.name}}"></a>
                         </span>
                     </div>
                     <div class="button">
@@ -59,15 +59,10 @@
                     </div>
                 </div>
             </div>
-            <div class="errors"
-                 th:if="${cart.status == T(io.github.akotu235.shop.service.shop.entity.OrderStatus).PENDING}">
-                <div class="error-message" th:unless="${position.product.enabled}">
-                    <span th:text="#{product.disabled}"></span>
-                </div>
+            <div class="errors">
                 <div class="error-message"
-                     th:if="${position.quantity > position.product.availableQuantity && position.product.enabled}">
-                    <span th:text="#{product.available-quantity} + ':'"></span>
-                    <span th:text="${position.product.availableQuantity}"></span>
+                     th:if="${position.hasError}">
+                    <span th:text="${position.errorMessage}"></span>
                 </div>
             </div>
         </div>
@@ -77,8 +72,8 @@
                 <span th:text="${cart.cartPrice}"></span>
                 <span th:text="${cart.currency}"></span>
             </div>
-            <a href="/order/set-delivery-method">
-                <button class="form-button" th:text="#{cart.button.checkout}"></button>
+            <a th:href="${cart.hasErrors ? '' : '/order/set-delivery-method'}">
+                <button class="form-button" th:text="#{cart.button.checkout}" th:disabled="${cart.hasErrors}"></button>
             </a>
         </div>
     </main>

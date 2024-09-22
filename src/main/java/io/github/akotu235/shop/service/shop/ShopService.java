@@ -22,6 +22,7 @@ import io.github.akotu235.shop.service.shop.service.DeliveryService;
 import io.github.akotu235.shop.service.shop.service.OrderService;
 import io.github.akotu235.shop.service.shop.service.ProductService;
 import io.github.akotu235.shop.service.shop.util.ProjectionUtil;
+import io.github.akotu235.shop.service.shop.validator.CartrPositionValidator;
 import io.github.akotu235.shop.service.shop.validator.OrderValidator;
 import io.github.akotu235.shop.service.user.UserService;
 import io.github.akotu235.shop.service.user.model.User;
@@ -55,9 +56,10 @@ public class ShopService {
     private final ShopConfigurationProperties config;
     private final AppConfigurationProperties appConfig;
     private final OrderValidator orderValidator;
+    private final CartrPositionValidator cartrPositionValidator;
 
 
-    public ShopService(ProductService productService, CategoryService categoryService, OrderService orderService, DeliveryService deliveryService, PaymentService paymentService, UserService userService, EmailService emailService, MessageSource messageSource, ShopConfigurationProperties config, AppConfigurationProperties appConfig, OrderValidator orderValidator) {
+    public ShopService(ProductService productService, CategoryService categoryService, OrderService orderService, DeliveryService deliveryService, PaymentService paymentService, UserService userService, EmailService emailService, MessageSource messageSource, ShopConfigurationProperties config, AppConfigurationProperties appConfig, OrderValidator orderValidator, CartrPositionValidator cartrPositionValidator) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.orderService = orderService;
@@ -69,6 +71,7 @@ public class ShopService {
         this.config = config;
         this.appConfig = appConfig;
         this.orderValidator = orderValidator;
+        this.cartrPositionValidator = cartrPositionValidator;
     }
 
     @Transactional
@@ -108,21 +111,16 @@ public class ShopService {
     }
 
     public void addOrderPosition(@Valid OrderPositionWriteModel newOrderPosition, Authentication authentication) {
-        OrderReadModel cart = getCart(authentication);
+        CartReadModel cart = getCart(authentication);
         if (Objects.equals(cart.getId(), newOrderPosition.getOrderId())) {
             orderService.addOrderPosition(newOrderPosition);
         } else throw new AccessDeniedException("error.access-denied");
     }
 
-    public List<OrderPositionReadModel> getOrderPositionsReadModel(Long orderId) {
-        Order order = orderService.getOrderById(orderId);
-        return order.getPositions().stream().map(orderPosition -> ProjectionUtil.getOrderPositionReadModel(orderPosition, orderPosition.getQuantity() * orderPosition.getProduct().getPrice())).toList();
-    }
-
-    public OrderReadModel getCart(Authentication authentication) {
+    public CartReadModel getCart(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             Order order = orderService.getCart(userService.getUser(authentication));
-            return getOrderReadModel(order);
+            return getCartReadModel(order);
         } else throw new AccessDeniedException("error.access-denied");
     }
 
@@ -155,12 +153,12 @@ public class ShopService {
         return orderService.getCart(userService.getUser(authentication)).getId();
     }
 
-    public Result<ProductReadModel> disableProduct(String productId) {
-        return new Result<>(true, ProjectionUtil.getProductReadModel(productService.setEnableProduct(Long.parseLong(productId), false)), "success.product-disable");
+    public void disableProduct(String productId) {
+        productService.setEnableProduct(Long.parseLong(productId), false);
     }
 
-    public Result<ProductReadModel> enableProduct(String productId) {
-        return new Result<>(true, ProjectionUtil.getProductReadModel(productService.setEnableProduct(Long.parseLong(productId), true)), "success.product-enable");
+    public void enableProduct(String productId) {
+        productService.setEnableProduct(Long.parseLong(productId), true);
     }
 
     public void setPositionQuantity(@Valid OrderPositionWriteModel newOrderPosition, Authentication authentication) {
@@ -176,7 +174,32 @@ public class ShopService {
     }
 
     private OrderReadModel getOrderReadModel(Order order) {
-        return ProjectionUtil.getOrderReadModel(order, getOrderPositionsReadModel(order.getId()), calculateCartTotalPrice(order.getId()), calculateOrderTotalPrice(order.getId()), config.getCurrency(), getDeliveryOptionReadModel(order.getDeliveryMethod()), ProjectionUtil.getShippingDetailsReadModel(order.getShippingDetails()));
+        return ProjectionUtil.getOrderReadModel(order, calculateCartTotalPrice(order.getId()), calculateOrderTotalPrice(order.getId()), config.getCurrency(), getDeliveryOptionReadModel(order.getDeliveryMethod()), ProjectionUtil.getShippingDetailsReadModel(order.getShippingDetails()));
+    }
+
+    private CartReadModel getCartReadModel(Order order) {
+        List<CartPositionReadModel> validatedCartPositions = getValidatedCartPositionsReadModel(order);
+        boolean hasError = validatedCartPositions.stream().anyMatch(CartPositionReadModel::getHasError);
+        return ProjectionUtil.getCartReadModel(order, validatedCartPositions, calculateCartTotalPrice(order.getId()), config.getCurrency(), hasError);
+    }
+
+    private List<CartPositionReadModel> getValidatedCartPositionsReadModel(Order order) {
+        return order.getPositions()
+                .stream().map(position -> {
+                    CartPositionReadModel cartPosition = new CartPositionReadModel();
+                    cartPosition.setProduct(ProjectionUtil.getProductReadModel(position.getProduct()));
+                    cartPosition.setQuantity(position.getQuantity());
+                    cartPosition.setTotalPrice(FormatUtils.formatPrice(position.getProduct().getPrice() * position.getQuantity()));
+                    Errors errors = new BeanPropertyBindingResult(order, "order");
+                    cartrPositionValidator.validate(position, errors);
+                    cartPosition.setHasError(false);
+                    if (errors.hasErrors()) {
+                        cartPosition.setHasError(true);
+                        cartPosition.setErrorMessage(errors.getAllErrors().getFirst().getDefaultMessage());
+                    }
+                    return cartPosition;
+                })
+                .toList();
     }
 
     private DeliveryOptionReadModel getDeliveryOptionReadModel(DeliveryMethod deliveryMethod) {
@@ -192,7 +215,7 @@ public class ShopService {
     }
 
     public ShippingDetailsWriteModel getShippingDetailsWriteModel(Authentication authentication) {
-        OrderReadModel order = getCart(authentication);
+        OrderReadModel order = getOrderById(getCartId(authentication).toString());
         return ProjectionUtil.getShippingDetailsWriteModel(order.getShippingDetails());
     }
 
@@ -202,7 +225,7 @@ public class ShopService {
 
     @Transactional(rollbackOn = AppException.class)
     public PaymentRequest getPaymentRequest(Authentication authentication) {
-        OrderReadModel order = getCart(authentication);
+        OrderReadModel order = getOrderById(getCartId(authentication).toString());
         if (order.getStatus().equals(OrderStatus.PENDING)) {
             Errors errors = new BeanPropertyBindingResult(order, "order");
             orderValidator.validate(order, errors);
@@ -277,5 +300,9 @@ public class ShopService {
 
     public void updateStatus(Long orderId, OrderStatus newStatus) {
         orderService.updateStatus(orderId, newStatus);
+    }
+
+    public Object getOrderSummary(Authentication authentication) {
+        return getOrderById(getCartId(authentication).toString());
     }
 }
