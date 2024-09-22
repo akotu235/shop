@@ -51,13 +51,13 @@
     <aside></aside>
     <main>
         <form th:action="@{/}" th:object="${params}" method="get">
-            <input type="text" name="name" th:value="*{name}" th:placeholder="#{shop.search.placeholder}"/>
+            <input type="text" name="name" th:value="*{name}" th:placeholder="#{shop.placeholder.search}"/>
             <input type="hidden" name="category" th:value="all"/>
             <input type="hidden" name="page" value="0"/>
             <input type="hidden" name="size" th:value="*{size}"/>
             <input type="hidden" name="sortBy" th:value="*{sortBy}"/>
             <input type="hidden" name="sortDirection" th:value="*{sortDirection}"/>
-            <button type="submit" th:text="#{shop.search.button}"></button>
+            <button type="submit" th:text="#{shop.button.search}"></button>
         </form>
         <div class="centered">
             <form action="#" th:action="@{/}" th:method="get" th:object="${params}">
@@ -89,7 +89,7 @@
                     <!--                        <input class="small-input" type="number" id="page" name="page" th:value="*{page}" min="0"-->
                     <!--                               th:field="*{page}"/>-->
                     <!--                    </div>-->
-                    <button type="submit" th:text="#{shop.page-settings.set.button}"></button>
+                    <button type="submit" th:text="#{shop.page-settings.button.apply}"></button>
                 </div>
 
             </form>

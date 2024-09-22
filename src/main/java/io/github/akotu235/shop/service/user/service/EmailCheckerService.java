@@ -45,7 +45,7 @@ public class EmailCheckerService {
 
     private String getMessage(User user, String token) {
         Object[] args = new Object[]{user.getUsername(), properties.getTitle(), properties.getUrl(), token};
-        return messageSource.getMessage("user.activation.email.text", args, user.getLocale());
+        return messageSource.getMessage("user.activation.email.content", args, user.getLocale());
     }
 
     private String generateToken(User user) {

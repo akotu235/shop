@@ -266,7 +266,7 @@ public class ShopService {
     private String getThankYouMessage(User user, String orderId) {
         String link = appConfig.getUrl() + "/user/" + user.getUsername() + "/orders/" + orderId;
         Object[] args = new Object[]{user.getName(), link, appConfig.getTitle()};
-        return messageSource.getMessage("user.confirming-purchase.email.text", args, user.getLocale());
+        return messageSource.getMessage("user.confirming-purchase.email.content", args, user.getLocale());
     }
 
     public List<OrderReadModel> getUserOrders(Authentication authentication) {
