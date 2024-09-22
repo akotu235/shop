@@ -16,8 +16,8 @@ public class FormatUtils {
         }
     }
 
-    public static String formatPrice(double price) {
-        return String.format("%.2f", price).replace('.', ',');
+    public static String formatPrice(double value) {
+        return String.format("%.2f", value).replace('.', ',');
     }
 
     public static double roundPriceToTwoDecimalPlaces(double value) {
