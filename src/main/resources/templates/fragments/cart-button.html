@@ -1,6 +1,6 @@
 <!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.CartReadModel"*/-->
 <a id="cart" class="header-element" href="/cart">
-    <div th:if="${cart != null}" id="cart-badge" th:text="${cart.size}"></div>
+    <div th:if="${cart != null && cart.size > 0}" id="cart-badge" th:text="${cart.size}"></div>
     <div class="header-ico">
         <svg th:replace="~{fragments/icon/cart :: svg}"></svg>
     </div>

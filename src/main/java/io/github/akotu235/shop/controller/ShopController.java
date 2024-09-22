@@ -65,6 +65,26 @@ public class ShopController {
         return "shop";
     }
 
+    @GetMapping("/last-page")
+    public String getLastPageRedirect(HttpSession session) {
+        return getRedirectLastPageUrlFromSession(session);
+    }
+
+    @GetMapping("/all-products")
+    public String getAllProductsRedirect(HttpSession session) {
+        return getProductsByCategoryFromSession(session, "all");
+    }
+
+    @GetMapping("/category/{category}")
+    public String getCategoryRedirect(HttpSession session, @PathVariable String category) {
+        return getProductsByCategoryFromSession(session, category);
+    }
+
+    @GetMapping("/categories")
+    public String getCategories() {
+        return "categories";
+    }
+
     @GetMapping("/products/{productId}")
     public String getProduct(@PathVariable String productId,
                              Authentication authentication,
@@ -83,14 +103,8 @@ public class ShopController {
     }
 
     @GetMapping("/cart")
-    public String getCart(Authentication authentication, Model model) {
-        model.addAttribute("cart", shopService.getCart(authentication));
+    public String getCart() {
         return "cart";
-    }
-
-    @GetMapping("/categories")
-    public String getCategories() {
-        return "categories";
     }
 
     @PostMapping("/cart/add")
@@ -103,18 +117,7 @@ public class ShopController {
             shopService.addOrderPosition(position, authentication);
         }
         position.setQuantity(1);
-        RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
-        if (requestParams == null) {
-            return "redirect:/";
-        }
-        return "redirect:" + UriComponentsBuilder.fromPath("/")
-                .queryParam("page", requestParams.getPage())
-                .queryParam("name", requestParams.getName())
-                .queryParam("category", requestParams.getCategory())
-                .queryParam("size", requestParams.getSize())
-                .queryParam("sortBy", requestParams.getSortBy())
-                .queryParam("sortDirection", requestParams.getSortDirection())
-                .toUriString();
+        return getRedirectLastPageUrlFromSession(session);
     }
 
     @PostMapping("/cart/{productId}/set-quantity")
@@ -194,5 +197,33 @@ public class ShopController {
                                   Model model) {
         model.addAttribute("order", shopService.getUserOrder(orderId, authentication));
         return "order-details";
+    }
+
+    private String getRedirectLastPageUrlFromSession(HttpSession session) {
+        RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
+        if (requestParams == null) {
+            return "redirect:/";
+        }
+        return "redirect:" + UriComponentsBuilder.fromPath("/")
+                .queryParam("page", requestParams.getPage())
+                .queryParam("name", requestParams.getName())
+                .queryParam("category", requestParams.getCategory())
+                .queryParam("size", requestParams.getSize())
+                .queryParam("sortBy", requestParams.getSortBy())
+                .queryParam("sortDirection", requestParams.getSortDirection())
+                .toUriString();
+    }
+
+    private String getProductsByCategoryFromSession(HttpSession session, String category) {
+        RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
+        if (requestParams == null) {
+            return "redirect:/";
+        }
+        return "redirect:" + UriComponentsBuilder.fromPath("/")
+                .queryParam("category", category)
+                .queryParam("size", requestParams.getSize())
+                .queryParam("sortBy", requestParams.getSortBy())
+                .queryParam("sortDirection", requestParams.getSortDirection())
+                .toUriString();
     }
 }

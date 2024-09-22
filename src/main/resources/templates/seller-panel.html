@@ -6,24 +6,30 @@
     <title th:text="${@environment.getProperty('app.title')}"></title>
     <style th:replace="~{fragments/style/general :: style}"></style>
     <style th:replace="~{fragments/style/header :: style}"></style>
-    <style th:replace="~{fragments/style/buttons :: style}"></style>
+    <style th:replace="~{fragments/style/links :: style}"></style>
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 <div id="content">
     <aside></aside>
     <main>
-        <div id="buttons">
-            <a href="seller-panel/new-product">
-                <button th:text="#{seller-panel.button.add-product}"></button>
-            </a>
-            <a href="seller-panel/new-category">
-                <button th:text="#{seller-panel.button.add-category}"></button>
-            </a>
-            <a href="/seller-panel/orders">
-                <button th:text="#{seller-panel.button.orders}"></button>
-            </a>
-        </div>
+        <ul id="links">
+            <li>
+                <a class="hover-area"
+                   href="seller-panel/new-product"
+                   th:text="#{seller-panel.button.add-product}"></a>
+            </li>
+            <li>
+                <a class="hover-area"
+                   href="seller-panel/new-category"
+                   th:text="#{seller-panel.button.add-category}"></a>
+            </li>
+            <li>
+                <a class="hover-area"
+                   href="/seller-panel/orders"
+                   th:text="#{seller-panel.button.orders}"></a>
+            </li>
+        </ul>
     </main>
     <aside></aside>
 </div>

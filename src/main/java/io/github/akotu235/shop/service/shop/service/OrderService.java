@@ -183,7 +183,8 @@ public class OrderService {
     }
 
     public void updateStatus(Long orderId, OrderStatus newStatus) {
-        getOrderById(orderId).setStatus(newStatus);
-        orderRepository.save(getOrderById(orderId));
+        Order order = getOrderById(orderId);
+        order.setStatus(newStatus);
+        orderRepository.save(order);
     }
 }

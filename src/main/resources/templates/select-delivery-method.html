@@ -50,7 +50,6 @@
         <form th:action="@{/order/set-delivery-method}" th:object="${delivery}" method="post">
             <label for="deliveryMethod" th:text="#{delivery.label}"></label>
             <select id="deliveryMethod" th:field="*{deliveryMethod}">
-                <option value="" disabled th:text="#{delivery.select-method}"></option>
                 <option th:each="option : ${deliveryOptions}"
                         th:value="${option.deliveryMethod}"
                         th:text="#{${option.translationCode}}">

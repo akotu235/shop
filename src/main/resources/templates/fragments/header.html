@@ -1,7 +1,7 @@
 <!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.OrderReadModel"*/-->
 <header id="header">
     <div class="header-logo">
-        <a href="/"><h1 class="header-element" th:text="${@environment.getProperty('app.title')}"></h1></a>
+        <a href="/last-page"><h1 class="header-element" th:text="${@environment.getProperty('app.title')}"></h1></a>
     </div>
     <nav th:replace="~{fragments/nav :: nav}"></nav>
     <div id="header-user">
@@ -29,7 +29,7 @@
 </header>
 <header id="header-mobile">
     <div class="header-logo">
-        <a href="/"><h1 class="header-element" th:text="${@environment.getProperty('app.title')}"></h1></a>
+        <a href="/last-page"><h1 class="header-element" th:text="${@environment.getProperty('app.title')}"></h1></a>
     </div>
     <div th:replace="~{fragments/mobile-nav :: nav}"></div>
     <div th:if="${#authorization.expression('isAuthenticated()')}">

@@ -10,11 +10,12 @@
                 <li><a href="/seller-panel/orders" th:text="#{nav.seller-panel.orders}"></a></li>
             </ul>
         </li>
+        <li><a href="/all-products" th:text="#{nav.all-products}"></a></li>
         <li class="dropdown">
             <a href="/categories" class="dropbtn" th:text="#{nav.product-categories}"></a>
             <ul class="dropdown-content">
                 <li th:each="category : ${categories}">
-                    <a th:text="${category.name}" th:href="@{'/?category=' + ${category.name}}"></a>
+                    <a th:text="${category.name}" th:href="@{'/category/' + ${category.name}}"></a>
                 </li>
             </ul>
         </li>

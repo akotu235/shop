@@ -15,6 +15,7 @@
     <aside></aside>
     <main>
         <!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.CartReadModel"*/-->
+        <div th:if="${cart.size == 0}" th:text="#{cart.info.empty}"></div>
         <div class="product-container"
              th:classappend="${position.hasError ? 'error-border' : ''}"
              th:each="position : ${cart.positions}">

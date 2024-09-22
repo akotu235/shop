@@ -63,28 +63,32 @@ public class SellerController {
     }
 
     @PostMapping("/seller-panel/save-product")
-    public ModelAndView saveProduct(@ModelAttribute("product") @Valid NewProductWriteModel product,
-                                    BindingResult bindingResult,
-                                    Model model) {
+    public String saveProduct(@ModelAttribute("product") @Valid NewProductWriteModel product,
+                              BindingResult bindingResult,
+                              Model model) {
         newProductFormValidator.validate(product, bindingResult);
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("new-product-form");
+            return "new-product-form";
         }
         Result<ProductReadModel> result = shopService.createProduct(product);
-        model.addAttribute("result", result);
-        return new ModelAndView("result");
+        if (result.isSuccess()) {
+            return "redirect:/products/" + result.object().getId();
+        } else {
+            model.addAttribute("result", result);
+            return "result";
+        }
     }
 
     @GetMapping("/seller-panel/disable-product/{productId}")
-    public ModelAndView disableProduct(@PathVariable String productId, Model model) {
-        model.addAttribute("result", shopService.disableProduct(productId));
-        return new ModelAndView("result");
+    public String disableProduct(@PathVariable String productId, Model model) {
+        shopService.disableProduct(productId);
+        return "redirect:/products/" + productId;
     }
 
     @GetMapping("/seller-panel/enable-product/{productId}")
-    public ModelAndView enableProduct(@PathVariable String productId, Model model) {
-        model.addAttribute("result", shopService.enableProduct(productId));
-        return new ModelAndView("result");
+    public String enableProduct(@PathVariable String productId, Model model) {
+        shopService.enableProduct(productId);
+        return "redirect:/products/" + productId;
     }
 
     @GetMapping("/seller-panel/orders")
