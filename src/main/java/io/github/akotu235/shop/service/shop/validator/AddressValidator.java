@@ -35,8 +35,11 @@ public class AddressValidator implements Validator {
         }
 
         if (shippingDetails.getStreet() == null || !shippingDetails.getStreet().matches(".*[\\p{L}]{3,}.*")) {
-            String errorMessage = messageSource.getMessage("error.shipping-details.address.invalid", null, userLocale);
-            errors.rejectValue("address", "error.shipping-details.address.invalid", errorMessage);
+            String errorMessage = messageSource.getMessage("error.shipping-details.street.invalid", null, userLocale);
+            errors.rejectValue("street", "error.shipping-details.street.invalid", errorMessage);
+        } else if (!shippingDetails.getStreet().matches(".*\\d.*")) {
+            String errorMessage = messageSource.getMessage("error.shipping-details.street.no-digit", null, userLocale);
+            errors.rejectValue("street", "error.shipping-details.street.no-digit", errorMessage);
         }
 
         if (shippingDetails.getCity() == null || !shippingDetails.getCity().matches("[\\p{L} ]{2,}")) {
