@@ -23,7 +23,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
 public class ShopController {
@@ -38,46 +37,50 @@ public class ShopController {
     }
 
     @GetMapping("/")
-    public String getAllProducts(@RequestParam(defaultValue = "") String name,
-                                 @RequestParam(defaultValue = "all") String category,
-                                 @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "4") int size,
-                                 @RequestParam(defaultValue = "name") String sortBy,
-                                 @RequestParam(defaultValue = "asc") String sortDirection,
-                                 HttpSession session,
-                                 Model model) {
-        if (size > 20) {
-            size = 20;
+    public String getShopPage(HttpSession session, Model model) {
+        RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
+        if (requestParams == null) {
+            requestParams = new RequestParamsReadModel("", "all", 0, 4, "name", "asc");
         }
-        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Sort.Direction direction = Sort.Direction.fromString(requestParams.getSortDirection());
+        Pageable pageable = PageRequest.of(requestParams.getPage(), requestParams.getSize(), Sort.by(direction, requestParams.getSortBy()));
+        String name = requestParams.getName();
+        String category = requestParams.getCategory();
         if (!name.isBlank()) {
-            category = "all";
             model.addAttribute("page", shopService.searchProducts(pageable, name));
         } else if (!category.equals("all")) {
             model.addAttribute("page", shopService.getProductsByCategoryName(pageable, category));
         } else {
             model.addAttribute("page", shopService.getAllProducts(pageable));
         }
-        RequestParamsReadModel requestParams = new RequestParamsReadModel(name, category, page, size, sortBy, sortDirection);
         model.addAttribute("params", requestParams);
-        session.setAttribute("params", requestParams);
         return "shop";
     }
 
-    @GetMapping("/last-page")
-    public String getLastPageRedirect(HttpSession session) {
-        return getRedirectLastPageUrlFromSession(session);
+    @GetMapping("/set-params")
+    public String setParams(@RequestParam(defaultValue = "") String name,
+                            @RequestParam(defaultValue = "all") String category,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "4") int size,
+                            @RequestParam(defaultValue = "name") String sortBy,
+                            @RequestParam(defaultValue = "asc") String sortDirection,
+                            HttpSession session) {
+        size = Math.min(size, 20);
+        RequestParamsReadModel requestParams = new RequestParamsReadModel(name, category, page, size, sortBy, sortDirection);
+        session.setAttribute("params", requestParams);
+        return "redirect:/";
     }
 
     @GetMapping("/all-products")
     public String getAllProductsRedirect(HttpSession session) {
-        return getProductsByCategoryFromSession(session, "all");
+        setCategoryParam(session, "all");
+        return "redirect:/";
     }
 
     @GetMapping("/category/{category}")
     public String getCategoryRedirect(HttpSession session, @PathVariable String category) {
-        return getProductsByCategoryFromSession(session, category);
+        setCategoryParam(session, category);
+        return "redirect:/";
     }
 
     @GetMapping("/categories")
@@ -110,14 +113,13 @@ public class ShopController {
     @PostMapping("/cart/add")
     public String addToCart(@ModelAttribute("position") @Valid OrderPositionWriteModel position,
                             BindingResult bindingResult,
-                            Authentication authentication,
-                            HttpSession session) {
+                            Authentication authentication) {
         newOrderPositionFormValidator.validate(position, bindingResult);
         if (!bindingResult.hasErrors()) {
             shopService.addOrderPosition(position, authentication);
         }
         position.setQuantity(1);
-        return getRedirectLastPageUrlFromSession(session);
+        return "redirect:/";
     }
 
     @PostMapping("/cart/{productId}/set-quantity")
@@ -199,31 +201,11 @@ public class ShopController {
         return "order-details";
     }
 
-    private String getRedirectLastPageUrlFromSession(HttpSession session) {
+    private void setCategoryParam(HttpSession session, String category) {
         RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
-        if (requestParams == null) {
-            return "redirect:/";
-        }
-        return "redirect:" + UriComponentsBuilder.fromPath("/")
-                .queryParam("page", requestParams.getPage())
-                .queryParam("name", requestParams.getName())
-                .queryParam("category", requestParams.getCategory())
-                .queryParam("size", requestParams.getSize())
-                .queryParam("sortBy", requestParams.getSortBy())
-                .queryParam("sortDirection", requestParams.getSortDirection())
-                .toUriString();
-    }
-
-    private String getProductsByCategoryFromSession(HttpSession session, String category) {
-        RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
-        if (requestParams == null) {
-            return "redirect:/";
-        }
-        return "redirect:" + UriComponentsBuilder.fromPath("/")
-                .queryParam("category", category)
-                .queryParam("size", requestParams.getSize())
-                .queryParam("sortBy", requestParams.getSortBy())
-                .queryParam("sortDirection", requestParams.getSortDirection())
-                .toUriString();
+        requestParams.setName("");
+        requestParams.setCategory(category);
+        requestParams.setPage(0);
+        session.setAttribute("params", requestParams);
     }
 }

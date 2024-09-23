@@ -50,7 +50,7 @@
 <div id="content">
     <aside></aside>
     <main>
-        <form th:action="@{/}" th:object="${params}" method="get">
+        <form th:action="@{/set-params}" th:object="${params}" method="get">
             <input type="text" name="name" th:value="*{name}" th:placeholder="#{shop.placeholder.search}"/>
             <input type="hidden" name="category" th:value="all"/>
             <input type="hidden" name="page" value="0"/>
@@ -60,7 +60,7 @@
             <button type="submit" th:text="#{shop.button.search}"></button>
         </form>
         <div class="centered">
-            <form action="#" th:action="@{/}" th:method="get" th:object="${params}">
+            <form action="#" th:action="@{/set-params}" th:method="get" th:object="${params}">
                 <input type="hidden" name="category" th:value="*{category}"/>
                 <input type="hidden" name="name" th:value="*{name}"/>
                 <div class="page-settings">
@@ -96,7 +96,7 @@
         </div>
         <h2 th:unless="${params.category.equals('all')}" th:text="${params.category}"></h2>
         <div th:each="product : ${page}">
-            <a th:href="@{'/products/' + ${product.id}}" class="product-container">
+            <a th:href="@{'/products/' + ${product.id}}" class="product-container shadow">
                 <div class="image-container">
                     <img th:src="@{'/products/' + ${product.id} + '/photo/1'}" alt="photo"/>
                 </div>
@@ -121,7 +121,7 @@
 
         <div class="paging-buttons" th:if="${page.getTotalPages() > 1}">
             <div class="paging-button">
-                <form th:action="@{/}" method="get">
+                <form th:action="@{/set-params}" method="get">
                     <input type="hidden" name="page" th:value="${page.getNumber() - 1}"/>
                     <input type="hidden" name="name" th:value="${params.name}"/>
                     <input type="hidden" name="category" th:value="${params.category}"/>
@@ -137,7 +137,7 @@
                 <span th:text="${page.getTotalPages()}"></span>
             </div>
             <div class="paging-button">
-                <form th:action="@{/}" method="get">
+                <form th:action="@{/set-params}" method="get">
                     <input type="hidden" name="page" th:value="${page.getNumber() + 1}"/>
                     <input type="hidden" name="name" th:value="${params.name}"/>
                     <input type="hidden" name="category" th:value="${params.category}"/>
