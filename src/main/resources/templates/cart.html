@@ -16,7 +16,7 @@
     <main>
         <!--/*@thymesVar id="cart" type="io.github.akotu235.shop.service.shop.projection.read.CartReadModel"*/-->
         <div th:if="${cart.size == 0}" th:text="#{cart.info.empty}"></div>
-        <div class="product-container"
+        <div class="product-container shadow"
              th:classappend="${position.hasError ? 'error-border' : ''}"
              th:each="position : ${cart.positions}">
             <div class="product">
@@ -35,8 +35,8 @@
                                 <span th:text="${position.product.currency}"></span>
                             </div>
                             <div class="row-direction" th:if="${position.quantity > 1}">
-                                <span class="small price-per-unit"
-                                      th:text="'(' + ${position.product.price} + ' ' + #{position.per-unit} + ')'"></span>
+                                <small class="price-per-unit"
+                                      th:text="'(' + ${position.product.price} + ' ' + #{position.per-unit} + ')'"></small>
                             </div>
                         </div>
                     </div>
