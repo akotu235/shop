@@ -114,9 +114,7 @@ public class OrderService {
 
     public void setPositionQuantity(@Valid OrderPositionWriteModel newOrderPosition) {
         Order order = getOrderById(newOrderPosition.getOrderId());
-        getOrderPosition(newOrderPosition.getProductId(), order).ifPresent(orderPosition -> {
-            orderPosition.setQuantity(newOrderPosition.getQuantity());
-        });
+        getOrderPosition(newOrderPosition.getProductId(), order).ifPresent(orderPosition -> orderPosition.setQuantity(newOrderPosition.getQuantity()));
         orderRepository.save(order);
     }
 
@@ -156,7 +154,6 @@ public class OrderService {
         Order order = getOrderById(orderId);
         order.setStatus(OrderStatus.PROCESSING);
         orderRepository.save(order);
-
         taskScheduler.schedule(() -> processOrderAfterDelay(orderId),
                 new java.util.Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2)));
     }
@@ -164,11 +161,9 @@ public class OrderService {
     @Transactional(rollbackOn = AppException.class)
     public void processOrderAfterDelay(Long orderId) {
         Order order = getOrderById(orderId);
-
         if (order.getStatus() == OrderStatus.PROCESSING) {
             order.setStatus(OrderStatus.PENDING);
             orderRepository.save(order);
-
             List<OrderPosition> positions = order.getPositions();
             productService.cancelProductReservations(positions);
         }
