@@ -7,6 +7,7 @@ public class Theme {
     private final String primary;
     private final String secondary;
     private final String background;
+    private final String accentBackground;
     private final String font;
     private final String highlighted;
     private final String buttonFont;
@@ -18,6 +19,7 @@ public class Theme {
         this.primary = getColor(properties, name, "primary");
         this.secondary = getColor(properties, name, "secondary");
         this.background = getColor(properties, name, "background");
+        this.accentBackground = getColor(properties, name, "accent-background");
         this.font = getColor(properties, name, "font");
         this.highlighted = getColor(properties, name, "highlighted");
         this.buttonFont = getColor(properties, name, "button-font");
@@ -43,6 +45,10 @@ public class Theme {
 
     public String getBackground() {
         return background;
+    }
+
+    public String getAccentBackground() {
+        return accentBackground;
     }
 
     public String getFont() {

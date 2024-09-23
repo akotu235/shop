@@ -1,4 +1,11 @@
 <style>
+    .container {
+        background-color: [[${theme.accentBackground}]];
+        padding: 34px;
+        border-radius: 21px;
+        border: 1px solid [[${theme.primary}]];
+    }
+
     #product-container {
         display: flex;
         margin: 21px;
@@ -54,6 +61,15 @@
     }
 
     @media (max-width: 768px) {
+        #content {
+            background-color: [[${theme.accentBackground}]];
+        }
+
+        .container {
+            padding: 0;
+            border: none;
+        }
+
         #product-container {
             justify-content: center;
             align-items: center;
