@@ -73,8 +73,10 @@
                 <span th:text="${cart.cartPrice}"></span>
                 <span th:text="${cart.currency}"></span>
             </div>
+            <div class="error" th:if="${cart.hasErrors}" th:text="#{error.invalid-cart}"></div>
             <a th:href="${cart.hasErrors ? '' : '/order/set-delivery-method'}">
-                <button class="form-button" th:text="#{cart.button.checkout}" th:disabled="${cart.hasErrors}"></button>
+                <button class="form-button" th:text="#{cart.button.checkout}"
+                        th:disabled="${cart.hasErrors}"></button>
             </a>
         </div>
     </main>
