@@ -40,7 +40,7 @@ public class ShopController {
     public String getShopPage(HttpSession session, Model model) {
         RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
         if (requestParams == null) {
-            requestParams = new RequestParamsReadModel("", "all", 0, 4, "name", "asc");
+            requestParams = getDefaultParams();
         }
         Sort.Direction direction = Sort.Direction.fromString(requestParams.getSortDirection());
         Pageable pageable = PageRequest.of(requestParams.getPage(), requestParams.getSize(), Sort.by(direction, requestParams.getSortBy()));
@@ -203,9 +203,16 @@ public class ShopController {
 
     private void setCategoryParam(HttpSession session, String category) {
         RequestParamsReadModel requestParams = (RequestParamsReadModel) session.getAttribute("params");
+        if(requestParams == null){
+            requestParams = getDefaultParams();
+        }
         requestParams.setName("");
         requestParams.setCategory(category);
         requestParams.setPage(0);
         session.setAttribute("params", requestParams);
+    }
+
+    private RequestParamsReadModel getDefaultParams(){
+        return new RequestParamsReadModel("", "all", 0, 4,"name", "asc");
     }
 }
