@@ -125,7 +125,7 @@ public class ShopService {
     }
 
     public OrderPositionWriteModel getNewOrderPositionWriteModel(Authentication authentication, String productId) {
-        if (authentication != null) {
+        if (authentication != null && authentication.isAuthenticated()) {
             return new OrderPositionWriteModel(getCartId(authentication), Long.parseLong(productId), 1);
         } else {
             return new OrderPositionWriteModel();
@@ -144,13 +144,15 @@ public class ShopService {
     }
 
     public void removeFromCart(String productId, Authentication authentication) {
-        if (authentication != null) {
+        if (authentication != null && authentication.isAuthenticated()) {
             orderService.removePosition(getCartId(authentication), Long.parseLong(productId));
         } else throw new AccessDeniedException("error.access-denied");
     }
 
     private Long getCartId(Authentication authentication) {
-        return orderService.getCart(userService.getUser(authentication)).getId();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return orderService.getCart(userService.getUser(authentication)).getId();
+        } else throw new AccessDeniedException("error.access-denied");
     }
 
     public void disableProduct(String productId) {
@@ -168,7 +170,7 @@ public class ShopService {
     }
 
     public void setDeliveryMethod(DeliveryOptionWriteModel deliveryOptionWriteModel, Authentication authentication) {
-        if (authentication != null) {
+        if (authentication != null && authentication.isAuthenticated()) {
             orderService.setDeliveryMethod(getCartId(authentication), deliveryOptionWriteModel);
         } else throw new AccessDeniedException("error.access-denied");
     }
@@ -302,7 +304,7 @@ public class ShopService {
         orderService.updateStatus(orderId, newStatus);
     }
 
-    public Object getOrderSummary(Authentication authentication) {
+    public OrderReadModel getOrderSummary(Authentication authentication) {
         return getOrderById(getCartId(authentication).toString());
     }
 }
