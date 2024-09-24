@@ -2,7 +2,7 @@ app:
   title: PrimeDeals
   url: https://localhost:9443
   data-path: data
-  supported-languages: en, pl, uk, es
+  supported-languages: en, pl, uk, es, it
 shop:
   currency: PLN
   delivery:
