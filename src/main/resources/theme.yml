@@ -9,13 +9,13 @@ classic:
   header-font: '#bebebe'
   header-highlighted-font: '#ffffff'
 
-pink:
-  primary: '#FFC0CB'
+candy:
+  primary: '#ffc0cb'
   secondary: '#b48fff'
-  background: '#FFF5C2'
+  background: '#fff5c2'
   accent-background: '#ffffff'
   font: '#000000'
-  highlighted: '#ffffff'
-  button-font: '#7f44ff'
+  highlighted: '#7f44ff'
+  button-font: '#0059ac'
   header-font: '#0059ac'
   header-highlighted-font: '#003160'
