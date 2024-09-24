@@ -1,14 +1,37 @@
 <nav xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <div id="sideMenu" class="side-menu">
-        <a sec:authorize="hasRole('SELLER')" href="/seller-panel" th:text="#{nav.seller-panel}"></a>
-        <a href="/all-products" th:text="#{nav.all-products}"></a>
-        <a href="/categories" th:text="#{nav.product-categories}"></a>
-        <a href="/about" th:text="#{nav.about-us}"></a>
-        <a href="/contact" th:text="#{nav.contact}"></a>
+        <a class="side-menu-button"
+           th:href="@{/seller-panel}"
+           sec:authorize="hasRole('SELLER')"
+           th:text="#{nav.seller-panel}"></a>
+        <a class="side-menu-button"
+           th:href="@{/all-products}"
+           th:text="#{nav.all-products}"></a>
+        <a class="side-menu-button"
+           th:href="@{/categories}"
+           th:text="#{nav.product-categories}"></a>
+        <a class="side-menu-button"
+           th:href="@{/about}"
+           th:text="#{nav.about-us}"></a>
+        <a class="side-menu-button"
+           th:href="@{/contact}"
+           th:text="#{nav.contact}"></a>
         <br>
-        <a href="/register" th:unless="${#authorization.expression('isAuthenticated()')}" th:utext="#{header.register}"></a>
-        <a href="/login" th:unless="${#authorization.expression('isAuthenticated()')}" th:utext="#{header.login}"></a>
-        <a th:href="@{'/logout'}" th:if="${#authorization.expression('isAuthenticated()')}" th:text="#{header.logout}"></a>
-        <a th:href="@{'/user/' + ${#authentication.name}}" th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.name}"></a>
+        <a class="side-menu-button"
+           th:href="@{/register}"
+           th:unless="${#authorization.expression('isAuthenticated()')}"
+           th:utext="#{header.register}"></a>
+        <a class="side-menu-button"
+           th:href="@{/login}"
+           th:unless="${#authorization.expression('isAuthenticated()')}"
+           th:utext="#{header.login}"></a>
+        <a class="side-menu-button"
+           th:href="@{/logout}"
+           th:if="${#authorization.expression('isAuthenticated()')}"
+           th:text="#{header.logout}"></a>
+        <a class="side-menu-button"
+           th:href="@{'/user/' + ${#authentication.name}}" th:if="${#authorization.expression('isAuthenticated()')}"
+           th:text="${#authentication.name}"></a>
+        <div th:replace="~{fragments/lang-button :: div}"></div>
     </div>
 </nav>

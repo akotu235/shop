@@ -5,7 +5,6 @@
     </div>
     <nav th:replace="~{fragments/nav :: nav}"></nav>
     <div id="header-user">
-            <div th:replace="~{fragments/lang-button :: div}"></div>
         <div class="row-direction" th:if="${#authorization.expression('isAuthenticated()')}">
             <a th:replace="~{fragments/cart-button :: a}"></a>
             <div>
@@ -26,6 +25,7 @@
                 <div class="header-element" th:utext="#{header.login}"></div>
             </a>
         </div>
+        <div th:replace="~{fragments/lang-button :: div}"></div>
     </div>
 </header>
 <header id="header-mobile">

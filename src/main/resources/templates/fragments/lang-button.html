@@ -1,0 +1,19 @@
+<!--/*@thymesVar id="supportedLanguages" type="java.util.List<java.util.Locale>"*/-->
+<div id="language-button">
+    <div id="language">
+        <a th:href="@{'#'}">
+            <img class="shadow flag-img"
+                 th:src="@{/images/flags/{lang}.svg(lang=${#locale.getLanguage()})}"
+                 th:alt="${#locale.getLanguage()}"/>
+        </a>
+    </div>
+    <div id="language-container">
+        <a th:each="lang : ${supportedLanguages}"
+           th:unless="${lang.toLanguageTag() == #locale.getLanguage()}"
+           th:href="@{'?lang=' + ${lang}}">
+            <img class="shadow flag-img"
+                 th:src="@{/images/flags/{lang}.svg(lang=${lang})}"
+                 th:alt="${lang}"/>
+        </a>
+    </div>
+</div>

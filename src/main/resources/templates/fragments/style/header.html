@@ -57,6 +57,33 @@
         align-items: center;
     }
 
+    #language-container {
+        display: none;
+        align-items: center;
+        position: fixed;
+        top: 6vh;
+        right: 0;
+        height: 6vh;
+        margin-right: 34px;
+        width: fit-content;
+    }
+
+    .flag-img {
+        height: 2vh;
+        margin: 0 10px;
+    }
+
+    #language {
+        display: flex;
+        align-items: center;
+        position: fixed;
+        top: 6vh;
+        right: 0;
+        height: 6vh;
+        margin-right: 34px;
+        width: fit-content;
+    }
+
     .header-ico {
         height: 4dvh;
         height: 4vh;
@@ -91,7 +118,6 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-
         display: flex;
         justify-content: center;
         align-items: center;
@@ -131,7 +157,7 @@
         background-color: [[${theme.background}]];
         color: [[${theme.secondary}]];
         min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
     }
 
@@ -191,7 +217,7 @@
             z-index: 2000;
         }
 
-        .side-menu a {
+        .side-menu-button {
             padding: 10px 15px;
             text-decoration: none;
             color: [[${theme.headerFont}]];
@@ -202,6 +228,18 @@
 
         .side-menu.active {
             width: 100vw;
+        }
+
+        #language-container {
+            all: unset;
+            position: absolute;
+            bottom: 13px;
+            left: 13px;
+            display: flex;
+        }
+
+        #language {
+            display: none;
         }
 
         #menu-button {
