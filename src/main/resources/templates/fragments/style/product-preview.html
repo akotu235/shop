@@ -5,10 +5,16 @@
         align-items: center;
         flex-direction: row;
         margin: 20px;
-        border: 1px solid [[${theme.primary}]];
+        border: 2px solid [[${theme.primary}]];
         background-color: [[${theme.accentBackground}]];
         border-radius: 10px;
         padding: 0 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .product-container:hover {
+        border: 2px solid [[${theme.secondary}]];
+        transform: scale(1.05);
     }
 
     .image-container {
@@ -57,7 +63,7 @@
         margin: 0 0 13px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1500px) {
         .image-container {
             width: 80px;
             height: 80px;

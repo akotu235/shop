@@ -1,3 +1,4 @@
+//mobile-menu-button
 function toggleMenu() {
     let menu = document.getElementById("sideMenu");
     let button = document.getElementById("menu-button");
@@ -6,10 +7,9 @@ function toggleMenu() {
     button.classList.toggle("open");
 }
 
-
+//lang-button
 const language = document.getElementById('language');
 const languageContainer = document.getElementById('language-container');
-const body = document.getElementsByTagName('body')[0];
 
 language.addEventListener('mouseenter', () => {
     language.style.display = 'none';
@@ -20,3 +20,10 @@ languageContainer.addEventListener('mouseleave', () => {
     language.style.display = 'flex';
     languageContainer.style.display = 'none';
 });
+
+
+//search-bar
+const searchInput = document.getElementById('search-input');
+window.onload = function () {
+    searchInput.focus();
+};

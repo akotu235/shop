@@ -3,24 +3,33 @@
         background-color: [[${theme.accentBackground}]];
         padding: 34px;
         border-radius: 21px;
-        border: 1px solid [[${theme.primary}]];
+        border: 2px solid [[${theme.primary}]];
     }
 
     #product-container {
         display: flex;
-        margin: 21px;
+        flex-direction: column;
+    }
+
+    #product-container h2 {
+        margin: 0;
+    }
+
+    #product-details {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
     }
 
     #description-container {
-        margin: 54px;
+        margin: 21px;
     }
 
     .image-container {
-        width: 400px;
-        height: 400px;
+        width: 250px;
+        height: 250px;
         overflow: hidden;
         position: relative;
-        margin-right: 30px;
     }
 
     .image-container img {
@@ -32,12 +41,12 @@
         left: 0;
     }
 
-    .form-container {
-        padding: 21px;
-    }
-
-    .info-container{
-        min-width: 33%;
+    .info-container {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 21px;
     }
 
     .info-item span {
@@ -47,7 +56,11 @@
 
     .info-item {
         display: flex;
-        margin: 5px 13px;
+        margin: 5px 0;
+    }
+
+    .form-container {
+        padding: 13px;
     }
 
     .seller-container {
@@ -60,32 +73,39 @@
         margin: 34px 0;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1500px) {
         #content {
             background-color: [[${theme.accentBackground}]];
         }
 
         .container {
-            padding: 0;
             border: none;
             box-shadow: none;
         }
 
-        #product-container {
-            justify-content: center;
-            align-items: center;
+        #product-details {
+            display: flex;
+            align-items: flex-start;
             flex-direction: column;
         }
 
         .image-container {
-            width: 300px;
-            height: 300px;
-            margin: 0 0 50px 0;
+            width: 100px;
+            height: 100px;
         }
 
+        .seller-container {
+            padding: 21px;
+            width: 100%;
+        }
 
         #description-container {
             margin: 0;
+        }
+
+        .info-container {
+            width: 100%;
+            padding: 0;
         }
     }
 </style>

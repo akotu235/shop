@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +32,7 @@
             font-size: 34px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1500px) {
             #total-price {
                 padding: 20px 0;
                 font-size: 20px;
@@ -49,11 +50,14 @@
             <div class="info">
                 <span class="secondary-color" th:text="#{order.status}"></span>
                 <span th:text="${order.status}"></span>
-                <form sec:authorize="hasRole('SELLER')" th:if="${statuses}" th:action="@{/seller-panel/orders/{orderId}/updateStatus(orderId=${order.id})}" th:object="${order}" method="post">
+                <form sec:authorize="hasRole('SELLER')" th:if="${statuses}"
+                      th:action="@{/seller-panel/orders/{orderId}/updateStatus(orderId=${order.id})}"
+                      th:object="${order}" method="post">
                     <label th:text="#{seller-panel.label.set-status}"></label>
-                        <select name="status">
-                            <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}" th:selected="${status == order.status}"></option>
-                        </select>
+                    <select name="status">
+                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"
+                                th:selected="${status == order.status}"></option>
+                    </select>
                     <button type="submit" th:text="#{seller-panel.button.set-status}"></button>
                 </form>
             </div>

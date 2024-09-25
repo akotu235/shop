@@ -8,49 +8,78 @@
     <style th:replace="~{fragments/style/header :: style}"></style>
     <style th:replace="~{fragments/style/product-preview :: style}"></style>
     <style>
-        .small-input {
-            width: 50px;
-        }
-
         .page-settings {
             display: flex;
             justify-content: center;
-            align-items: center;
             flex-direction: row;
-            padding: 34px 0;
+            background-color: [[${theme.accentBackground}]];
+            margin: 21px 0;
+            border-radius: 8px;
+            border: 2px solid [[${theme.secondary}]];
         }
 
         .page-settings-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 0 21px;
+            margin: 8px 21px;
+        }
+
+        .page-settings button {
+            padding: 0 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+            font-size: 16px;
+        }
+
+        .page-settings label {
+            margin-bottom: 5px;
         }
 
         #search-form {
-            display: flex;
+            position: relative;
+            display: inline-block;
+            width: 100%;
         }
 
         #search-input {
-            flex: 1;
-            margin-right: 13px;
-            font-size: 21px;
+            font-size: 16px;
+            padding: 5px 100px 5px 8px;
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid [[${theme.secondary}]];
         }
 
-        @media (max-width: 768px) {
+        #search-button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            padding: 0 10px;
+            border: 2px solid [[${theme.secondary}]];
+            border-left: none;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+            font-size: 16px;
+        }
+
+        @media (max-width: 1500px) {
             .page-settings {
                 flex-direction: column;
-                align-items: flex-end;
-                padding: 21px 0;
+                padding-top: 13px;
             }
 
             .page-settings-item {
-                margin: 5px;
+                margin: 5px 13px;
                 flex-direction: row;
             }
 
             .page-settings button {
                 margin-top: 13px;
+                width: 100%;
+                border-radius: 0 0 5px 5px;
+                padding: 5px;
             }
         }
     </style>
@@ -61,21 +90,21 @@
     <aside></aside>
     <main>
         <form id="search-form" th:action="@{/set-params}" th:object="${params}" method="get">
-            <input id="search-input" class="shadow" type="text" name="name"
-                   th:value="*{name}"
-                   th:placeholder="#{shop.placeholder.search}"/>
             <input type="hidden" name="category" th:value="all"/>
             <input type="hidden" name="page" value="0"/>
             <input type="hidden" name="size" th:value="*{size}"/>
             <input type="hidden" name="sortBy" th:value="*{sortBy}"/>
             <input type="hidden" name="sortDirection" th:value="*{sortDirection}"/>
-            <button id="search-button" class="shadow" type="submit" th:text="#{shop.button.search}"></button>
+            <input id="search-input" class="shadow" type="text" name="name"
+                   th:value="*{name}"
+                   th:placeholder="#{shop.placeholder.search}"/>
+            <button id="search-button" type="submit" th:text="#{shop.button.search}"></button>
         </form>
         <div class="centered">
             <form action="#" th:action="@{/set-params}" th:method="get" th:object="${params}">
                 <input type="hidden" name="category" th:value="*{category}"/>
                 <input type="hidden" name="name" th:value="*{name}"/>
-                <div class="page-settings">
+                <div class="page-settings shadow">
                     <div class="page-settings-item">
                         <label for="sortBy" th:text="#{shop.page-settings.sort-by}"></label>
                         <select id="sortBy" name="sortBy" th:field="*{sortBy}">
@@ -93,17 +122,11 @@
                     </div>
                     <div class="page-settings-item">
                         <label for="size" th:text="#{shop.page-settings.page-size}"></label>
-                        <input class="small-input" type="number" id="size" name="size" min="1" max="20"
+                        <input type="number" id="size" name="size" min="1" max="20"
                                th:value="*{size}" th:field="*{size}"/>
                     </div>
-                    <!--                    <div>-->
-                    <!--                        <label for="page" th:text="#{shop.page-settings.page-number}"></label>-->
-                    <!--                        <input class="small-input" type="number" id="page" name="page" th:value="*{page}" min="0"-->
-                    <!--                               th:field="*{page}"/>-->
-                    <!--                    </div>-->
                     <button type="submit" th:text="#{shop.page-settings.button.apply}"></button>
                 </div>
-
             </form>
         </div>
         <h2 th:unless="${params.category.equals('all')}" th:text="${params.category}"></h2>

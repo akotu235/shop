@@ -36,7 +36,7 @@
                             </div>
                             <div class="row-direction" th:if="${position.quantity > 1}">
                                 <small class="price-per-unit"
-                                      th:text="'(' + ${position.product.price} + ' ' + #{position.per-unit} + ')'"></small>
+                                       th:text="'(' + ${position.product.price} + ' ' + #{position.per-unit} + ')'"></small>
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                         <span>
                             <a class="hover-area"
                                th:text="${position.product.category.name}"
-                               th:href="@{'/?category=' + ${position.product.category.name}}"></a>
+                               th:href="@{'/category/' + ${position.product.category.name}}"></a>
                         </span>
                     </div>
                     <div class="button">
