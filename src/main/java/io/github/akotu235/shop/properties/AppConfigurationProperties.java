@@ -12,6 +12,7 @@ public class AppConfigurationProperties {
     private String url;
     private String dataPath;
     private List<String> supportedLanguages;
+    private boolean loadSampleData;
 
     public String getTitle() {
         return title;
@@ -43,5 +44,13 @@ public class AppConfigurationProperties {
 
     public void setSupportedLanguages(List<String> supportedLanguages) {
         this.supportedLanguages = supportedLanguages;
+    }
+
+    public boolean isLoadSampleData() {
+        return loadSampleData;
+    }
+
+    public void setLoadSampleData(boolean loadSampleData) {
+        this.loadSampleData = loadSampleData;
     }
 }

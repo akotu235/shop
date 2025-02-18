@@ -1,5 +1,6 @@
 package io.github.akotu235.shop.service.shop.repository;
 
+import io.github.akotu235.shop.service.shop.entity.Category;
 import io.github.akotu235.shop.service.shop.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,8 @@ public interface ProductRepository {
     Page<Product> findByNameOrCategoryNameContainingIgnoreCase(Pageable page, String name);
 
     Optional<Product> findProductById(Long id);
+
+    Optional<Product> findByNameAndCategory(String name, Category category);
 
     Product save(Product entity);
 }
