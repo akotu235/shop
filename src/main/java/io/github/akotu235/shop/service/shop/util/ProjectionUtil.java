@@ -19,7 +19,7 @@ public class ProjectionUtil {
     }
 
     public static ProductReadModel getProductReadModel(Product product) {
-        return new ProductReadModel(product.getId(), product.getName(), product.getDescription(), FormatUtils.formatPrice(product.getPrice()), product.getCurrency(), product.getAvailableQuantity(), product.getPhotosQuantity(), product.isEnabled(), getCategoryReadModel(product.getCategory()));
+        return new ProductReadModel(product.getId(), product.getName(), product.getDescription(), FormatUtils.formatPrice(product.getPrice().doubleValue()), product.getCurrency(), product.getAvailableQuantity(), product.getPhotosQuantity(), product.isEnabled(), getCategoryReadModel(product.getCategory()));
     }
 
     public static Page<ProductReadModel> getProductsReadModel(Page<Product> products) {
@@ -32,7 +32,7 @@ public class ProjectionUtil {
     }
 
     public static List<OrderPositionReadModel> getOrderPositionsReadModel(Order order) {
-        return order.getPositions().stream().map(orderPosition -> ProjectionUtil.getOrderPositionReadModel(orderPosition, orderPosition.getQuantity() * orderPosition.getProduct().getPrice())).toList();
+        return order.getPositions().stream().map(orderPosition -> ProjectionUtil.getOrderPositionReadModel(orderPosition, orderPosition.getQuantity() * orderPosition.getProduct().getPrice().doubleValue())).toList();
     }
 
     public static CartReadModel getCartReadModel(Order order, List<CartPositionReadModel> positions, double cartPrice, String currency, boolean hasError) {

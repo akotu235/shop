@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 @Component
@@ -29,7 +30,7 @@ public class NewProductFormValidator implements Validator {
         NewProductWriteModel product = (NewProductWriteModel) target;
         Locale userLocale = LocaleContextHolder.getLocale();
 
-        if (product.getPrice() <= 0) {
+        if (product.getPrice().compareTo(BigDecimal.ZERO) > 0) {
             errors.rejectValue("price", "error.product", messageSource.getMessage("error.product.incorrect-price", null, userLocale));
         }
 

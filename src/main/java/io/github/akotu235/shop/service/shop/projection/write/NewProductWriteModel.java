@@ -3,11 +3,13 @@ package io.github.akotu235.shop.service.shop.projection.write;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+
 public class NewProductWriteModel {
     private String name;
     private MultipartFile photo;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String currency;
     private int availableQuantity;
     private String category;
@@ -36,11 +38,11 @@ public class NewProductWriteModel {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

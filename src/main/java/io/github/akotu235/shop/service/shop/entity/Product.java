@@ -4,6 +4,8 @@ import io.github.akotu235.shop.service.shop.projection.write.NewProductWriteMode
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -18,7 +20,7 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @Column(nullable = false)
     private String currency;
@@ -72,11 +74,11 @@ public class Product {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

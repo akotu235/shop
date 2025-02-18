@@ -103,7 +103,7 @@ public class OrderService {
     }
 
     public Double calculateOrderPositionsTotalPrice(Long orderId) {
-        return getOrderById(orderId).getPositions().stream().mapToDouble(orderPosition -> orderPosition.getQuantity() * orderPosition.getProduct().getPrice()).sum();
+        return getOrderById(orderId).getPositions().stream().mapToDouble(orderPosition -> orderPosition.getQuantity() * orderPosition.getProduct().getPrice().doubleValue()).sum();
     }
 
     public void removePosition(Long cartId, Long productId) {

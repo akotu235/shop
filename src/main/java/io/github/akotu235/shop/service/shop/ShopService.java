@@ -58,7 +58,6 @@ public class ShopService {
     private final OrderValidator orderValidator;
     private final CartrPositionValidator cartrPositionValidator;
 
-
     public ShopService(ProductService productService, CategoryService categoryService, OrderService orderService, DeliveryService deliveryService, PaymentService paymentService, UserService userService, EmailService emailService, MessageSource messageSource, ShopConfigurationProperties config, AppConfigurationProperties appConfig, OrderValidator orderValidator, CartrPositionValidator cartrPositionValidator) {
         this.productService = productService;
         this.categoryService = categoryService;
@@ -191,7 +190,7 @@ public class ShopService {
                     CartPositionReadModel cartPosition = new CartPositionReadModel();
                     cartPosition.setProduct(ProjectionUtil.getProductReadModel(position.getProduct()));
                     cartPosition.setQuantity(position.getQuantity());
-                    cartPosition.setTotalPrice(FormatUtils.formatPrice(position.getProduct().getPrice() * position.getQuantity()));
+                    cartPosition.setTotalPrice(FormatUtils.formatPrice(position.getProduct().getPrice().doubleValue() * position.getQuantity()));
                     Errors errors = new BeanPropertyBindingResult(order, "order");
                     cartrPositionValidator.validate(position, errors);
                     cartPosition.setHasError(false);
