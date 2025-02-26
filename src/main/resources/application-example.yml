@@ -1,8 +1,10 @@
 app:
   title: PrimeDeals
   url: https://localhost:9443
-  data-path: data
   supported-languages: en, pl, uk, es, it, fr, cs, nl, no, de, ru, zh
+  data-path: data
+  upload:
+    max-file-size: 100MB
   load-sample-data: false
 shop:
   currency: PLN
@@ -37,6 +39,10 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   mail:
     host: smtp.gmail.com
     port: 587
