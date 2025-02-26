@@ -9,6 +9,17 @@ classic:
   header-font: '#bebebe'
   header-highlighted-font: '#ffffff'
 
+classic-dark:
+  primary: '#3399ff'
+  secondary: '#1c7ed6'
+  background: '#1e1e1e'
+  accent-background: '#2c2c2c'
+  font: '#dddddd'
+  highlighted: '#f5f5f5'
+  button-font: '#ffffff'
+  header-font: '#f5f5f5'
+  header-highlighted-font: '#ffffff'
+
 candy:
   primary: '#ffc0cb'
   secondary: '#b48fff'
@@ -19,3 +30,14 @@ candy:
   button-font: '#0059ac'
   header-font: '#0059ac'
   header-highlighted-font: '#003160'
+
+candy-dark:
+  primary: '#ff69b4'
+  secondary: '#b48fff'
+  background: '#2e2e2e'
+  accent-background: '#3e3e3e'
+  font: '#ffffff'
+  highlighted: '#b48fff'
+  button-font: '#5d3e99'
+  header-font: '#5d3e99'
+  header-highlighted-font: '#66ccff'

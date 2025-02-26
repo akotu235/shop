@@ -33,5 +33,6 @@
            th:href="@{'/user/' + ${#authentication.name}}" th:if="${#authorization.expression('isAuthenticated()')}"
            th:text="${#authentication.name}"></a>
         <div th:replace="~{fragments/lang-button :: div}"></div>
+        <div th:replace="~{fragments/theme-button :: div}"></div>
     </div>
 </nav>

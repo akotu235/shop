@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html th:lang="#{lang.code}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${@environment.getProperty('app.title')}"></title>
+    <style th:replace="~{fragments/style/general :: style}"></style>
+    <style th:replace="~{fragments/style/header :: style}"></style>
+    <style th:replace="~{fragments/style/links :: style}"></style>
+    <style>
+        .theme-circle {
+            width: 2vh;
+            height: 2vh;
+            border-radius: 50%;
+            margin-right: 13px;
+        }
+
+        #links li {
+            display: flex;
+        }
+
+        #links a {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<div id="content">
+    <aside></aside>
+    <main>
+        <h2 th:text="#{themes.header}"></h2>
+        <ul id="links">
+            <li th:each="theme: ${themes}">
+                <a class="hover-area"
+                   th:href="@{'/theme/' + ${theme.getKey()}}">
+                    <div class="theme-circle shadow" th:style="'background-color:' + ${theme.getValue().primary}"></div>
+                    <div th:text="${theme.getValue().name}"></div>
+                </a>
+            </li>
+        </ul>
+    </main>
+    <aside></aside>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>

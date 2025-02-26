@@ -45,6 +45,10 @@ public class ThemeService {
         return themes.get("classic");
     }
 
+    public Map<String, Theme> getThemes() {
+        return themes;
+    }
+
     private static Map<String, Theme> load() {
         Properties properties = loadYamlProperties();
         Set<String> themeNames = getThemeNames(properties);

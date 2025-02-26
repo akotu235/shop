@@ -6,12 +6,13 @@ import io.github.akotu235.shop.service.theme.model.Theme;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/theme")
+@RequestMapping
 public class ThemeController {
     private final ThemeService themeService;
 
@@ -19,13 +20,19 @@ public class ThemeController {
         this.themeService = themeService;
     }
 
-    @GetMapping("/{themeName}")
-    public String setDayTheme(@PathVariable String themeName,
-                              HttpServletResponse response) {
+    @GetMapping("/themes")
+    public String getThemes(Model model) {
+        model.addAttribute("themes", themeService.getThemes());
+        return "themes";
+    }
+
+    @GetMapping("theme/{themeName}")
+    public String setTheme(@PathVariable String themeName,
+                           HttpServletResponse response) {
         Theme theme = themeService.getTheme(themeName);
         Cookie cookie = new Cookie("theme", theme.getName());
         cookie.setPath("/");
         response.addCookie(cookie);
-        return "redirect:/";
+        return "redirect:/themes";
     }
 }
