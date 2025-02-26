@@ -1,7 +1,9 @@
 package io.github.akotu235.shop.service.shop.validator;
 
 
+import io.github.akotu235.shop.service.files.UploadProperties;
 import io.github.akotu235.shop.service.shop.projection.write.NewProductWriteModel;
+import io.github.akotu235.shop.service.shop.service.CategoryService;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -15,9 +17,13 @@ import java.util.Locale;
 public class NewProductFormValidator implements Validator {
 
     private final MessageSource messageSource;
+    private final CategoryService categoryService;
+    private final UploadProperties uploadProperties;
 
-    public NewProductFormValidator(MessageSource messageSource) {
+    public NewProductFormValidator(MessageSource messageSource, CategoryService categoryService, UploadProperties uploadProperties) {
         this.messageSource = messageSource;
+        this.categoryService = categoryService;
+        this.uploadProperties = uploadProperties;
     }
 
     @Override
@@ -43,7 +49,15 @@ public class NewProductFormValidator implements Validator {
         }
 
         if (product.getCategory().isBlank()) {
+            errors.rejectValue("category", "error.product", messageSource.getMessage("error.product.blank-category", null, userLocale));
+        } else if (!categoryService.existsByName(product.getCategory())) {
+            errors.rejectValue("category", "error.product", messageSource.getMessage("error.product.category-not-exist", new Object[]{product.getCategory()}, userLocale));
+        }
 
+        if (product.getPhoto().isEmpty()) {
+            errors.rejectValue("photo", "error.product", messageSource.getMessage("error.product.no-photo", null, userLocale));
+        } else if (product.getPhoto().getSize() > uploadProperties.getMaxFileSize().toBytes()) {
+            errors.rejectValue("photo", "error.product", messageSource.getMessage("error.product.photo-too-large", new Object[]{uploadProperties.getMaxFileSize().toString()}, userLocale));
         }
     }
 }

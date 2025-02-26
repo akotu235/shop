@@ -31,4 +31,8 @@ public class CategoryService {
         }
         throw new InvalidAddressException("error.category.not-exist", name);
     }
+
+    public boolean existsByName(String name) {
+        return categoryRepository.existsByName(name);
+    }
 }
