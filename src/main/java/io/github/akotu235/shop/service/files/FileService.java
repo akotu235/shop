@@ -1,6 +1,6 @@
 package io.github.akotu235.shop.service.files;
 
-import io.github.akotu235.shop.exceptions.FileOperationException;
+import io.github.akotu235.shop.exceptions.ImageNotFoundException;
 import io.github.akotu235.shop.properties.AppConfigurationProperties;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class FileService {
         try {
             return FileUtils.getImage(getPath(relativePath));
         } catch (IOException e) {
-            throw new FileOperationException("error", e.getMessage());
+            throw new ImageNotFoundException("error", e.getMessage());
         }
     }
 

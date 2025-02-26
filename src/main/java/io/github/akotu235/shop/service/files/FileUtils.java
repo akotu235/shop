@@ -1,6 +1,7 @@
 package io.github.akotu235.shop.service.files;
 
 import io.github.akotu235.shop.exceptions.FileOperationException;
+import io.github.akotu235.shop.exceptions.ImageNotFoundException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,17 +51,25 @@ class FileUtils {
     static ResponseEntity<InputStreamResource> getImage(String filePath) throws IOException {
         File file = new File(filePath);
         if (!file.exists()) {
-            throw new FileOperationException("error.files.read-image");
+            throw new ImageNotFoundException("error.files.read-image");
         }
+        return getInputStreamResourceResponseEntity(file);
+    }
+
+    private static ResponseEntity<InputStreamResource> getInputStreamResourceResponseEntity(File file) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(file);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(getContentType(file)));
+        headers.setContentLength(file.length());
+        return new ResponseEntity<>(new InputStreamResource(fileInputStream), headers, HttpStatus.OK);
+    }
+
+    private static String getContentType(File file) throws IOException {
         String contentType = Files.probeContentType(file.toPath());
         if (contentType == null) {
             contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
-        FileInputStream fileInputStream = new FileInputStream(file);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(contentType));
-        headers.setContentLength(file.length());
-        return new ResponseEntity<>(new InputStreamResource(fileInputStream), headers, HttpStatus.OK);
+        return contentType;
     }
 
     private static void createDirectory(String path) {
