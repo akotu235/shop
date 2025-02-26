@@ -59,7 +59,10 @@
 
     input, textarea, select {
         border-radius: 5px;
-        color: #000000;
+        color: [[${theme.font}]];
+        background-color: [[${theme.accentBackground}]];
+        border: 1px solid [[${theme.secondary}]];
+        box-shadow: none;
     }
 
     input:focus, textarea:focus {
@@ -98,7 +101,11 @@
     }
 
     .shadow {
-        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5)
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .element-frame {
+        border: 1px solid [[${theme.secondary}]];
     }
 
     .primary-color {

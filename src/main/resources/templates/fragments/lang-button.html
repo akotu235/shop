@@ -5,6 +5,7 @@
             <img class="shadow flag-img"
                  th:src="@{/images/flags/{lang}.svg(lang=${#locale.getLanguage()})}"
                  th:alt="${#locale.getLanguage()}"/>
+            <span id="lang-arrow">▾</span>
         </a>
     </div>
     <div id="language-container">

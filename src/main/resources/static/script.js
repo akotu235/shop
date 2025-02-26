@@ -10,15 +10,16 @@ function toggleMenu() {
 //lang-button
 const language = document.getElementById('language');
 const languageContainer = document.getElementById('language-container');
+const langArrow = document.getElementById('lang-arrow');
 
-language.addEventListener('mouseenter', () => {
-    language.style.display = 'none';
-    languageContainer.style.display = 'flex';
-});
-
-languageContainer.addEventListener('mouseleave', () => {
-    language.style.display = 'flex';
-    languageContainer.style.display = 'none';
+language.addEventListener('click', () => {
+    if (languageContainer.style.display === 'flex') {
+        languageContainer.style.display = 'none';
+        langArrow.textContent = '▾';
+    } else {
+        languageContainer.style.display = 'flex';
+        langArrow.textContent = '▴';
+    }
 });
 
 
