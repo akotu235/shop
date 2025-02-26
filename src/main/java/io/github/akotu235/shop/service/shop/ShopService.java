@@ -1,7 +1,6 @@
 package io.github.akotu235.shop.service.shop;
 
 import io.github.akotu235.shop.exceptions.AccessDeniedException;
-import io.github.akotu235.shop.exceptions.AppException;
 import io.github.akotu235.shop.exceptions.ShopOperationException;
 import io.github.akotu235.shop.properties.AppConfigurationProperties;
 import io.github.akotu235.shop.result.Result;
@@ -224,7 +223,7 @@ public class ShopService {
         orderService.setShippingDetails(getCartId(authentication), shippingDetails);
     }
 
-    @Transactional(rollbackOn = AppException.class)
+    @Transactional
     public PaymentRequest getPaymentRequest(Authentication authentication) {
         OrderReadModel order = getOrderById(getCartId(authentication).toString());
         if (order.getStatus().equals(OrderStatus.PENDING)) {
@@ -245,8 +244,9 @@ public class ShopService {
         return paymentRequest;
     }
 
+    @Transactional
     public Result<Payment> processPayment(PaymentRequest paymentRequest) {
-        Order order = orderService.getOrderById(paymentRequest.getOrderId());
+        Order order = orderService.getOrderWithLock(paymentRequest.getOrderId());
         if (order.getStatus().equals(OrderStatus.PROCESSING)) {
             Payment payment = paymentService.processPayment(paymentRequest.getAmount(), paymentRequest.getCurrency());
             if (payment.getStatus().equals(PaymentStatus.SUCCESS)) {

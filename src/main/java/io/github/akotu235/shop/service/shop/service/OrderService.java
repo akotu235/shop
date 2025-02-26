@@ -8,6 +8,9 @@ import io.github.akotu235.shop.service.shop.projection.write.OrderPositionWriteM
 import io.github.akotu235.shop.service.shop.projection.write.ShippingDetailsWriteModel;
 import io.github.akotu235.shop.service.shop.repository.OrderRepository;
 import io.github.akotu235.shop.service.user.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.scheduling.TaskScheduler;
@@ -20,11 +23,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final TaskScheduler taskScheduler;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public OrderService(OrderRepository orderRepository, ProductService productService, TaskScheduler taskScheduler) {
         this.orderRepository = orderRepository;
@@ -82,7 +88,7 @@ public class OrderService {
 
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new ShopOperationException("error.shop.order.not-found"));
+                .orElseThrow(() -> new ShopOperationException("error.invalid-order"));
     }
 
     @Transactional(rollbackOn = AppException.class)
@@ -140,7 +146,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    @Transactional(rollbackOn = AppException.class)
+    @Transactional
     public void setOrderConfirmed(Long orderId) {
         Order order = getOrderById(orderId);
         order.setStatus(OrderStatus.PAID);
@@ -148,17 +154,14 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-
-    @Transactional(rollbackOn = AppException.class)
+    @Transactional
     public void setOrderProcessing(Long orderId) {
-        Order order = getOrderById(orderId);
-        order.setStatus(OrderStatus.PROCESSING);
-        orderRepository.save(order);
-        taskScheduler.schedule(() -> processOrderAfterDelay(orderId),
-                new java.util.Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2)));
+        updateStatus(orderId, OrderStatus.PROCESSING);
+        taskScheduler.schedule(() -> {
+            processOrderAfterDelay(orderId);
+        }, new java.util.Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(15)));
     }
 
-    @Transactional(rollbackOn = AppException.class)
     public void processOrderAfterDelay(Long orderId) {
         Order order = getOrderById(orderId);
         if (order.getStatus() == OrderStatus.PROCESSING) {
@@ -177,9 +180,15 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    @Transactional
     public void updateStatus(Long orderId, OrderStatus newStatus) {
-        Order order = getOrderById(orderId);
+        Order order = getOrderWithLock(orderId);
         order.setStatus(newStatus);
         orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order getOrderWithLock(Long orderId) {
+        return entityManager.find(Order.class, orderId, LockModeType.PESSIMISTIC_WRITE);
     }
 }
