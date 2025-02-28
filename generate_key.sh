@@ -1,0 +1,1 @@
+keytool -genkey -alias tomcat-shop -keyalg RSA -keysize 2048 -validity 3650 -keystore "./target/key.jks"
