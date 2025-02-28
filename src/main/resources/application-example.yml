@@ -1,11 +1,11 @@
 app:
-  title: PrimeDeals
-  url: https://localhost:9443
+  title: Shop
+  url: https://localhost:5443
   supported-languages: en, pl, uk, es, it, fr, cs, nl, no, de, ru, zh
   data-path: data
   upload:
     max-file-size: 100MB
-  load-sample-data: false
+  load-sample-data: true
 shop:
   currency: PLN
   delivery:
@@ -55,16 +55,16 @@ spring:
           starttls:
             enable: true
 server:
-  port.http: 980
-  port: 9443
+  port.http: 5080
+  port: 5443
   ssl:
     enabled: true
     key-alias: tomcat-shop
-    key-password: "key-pass"
-    key-store: classpath:ssl/key.jks
+    key-password: "password"
+    key-store: file:key.jks
     key-store-provider: SUN
     key-store-type: JKS
-    key-store-password: "key-store-pass"
+    key-store-password: "password"
   error:
     include-binding-errors: always
   servlet:
