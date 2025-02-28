@@ -103,6 +103,84 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-to-temp</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/temp-resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/resources</directory>
+                                    <includes>
+                                        <include>application-example.yml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>process-all</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <move file="${project.build.directory}/Shop.jar"
+                                      tofile="${project.build.directory}/temp/Shop.jar"
+                                      failonerror="false"/>
+                                <delete dir="${project.build.directory}" includeemptydirs="true">
+                                    <exclude name="temp/**"/>
+                                    <exclude name="temp-resources/**"/>
+                                </delete>
+                                <move file="${project.build.directory}/temp/Shop.jar"
+                                      tofile="${project.build.directory}/Shop.jar"
+                                      failonerror="false"/>
+                                <copy file="${project.build.directory}/temp-resources/application-example.yml"
+                                      tofile="${project.build.directory}/application.yml"
+                                      failonerror="false"/>
+                                <delete dir="${project.build.directory}/temp"/>
+                                <delete dir="${project.build.directory}/temp-resources"/>
+                                <exec executable="keytool" failonerror="false">
+                                    <arg value="-genkey"/>
+                                    <arg value="-alias"/>
+                                    <arg value="tomcat-shop"/>
+                                    <arg value="-keyalg"/>
+                                    <arg value="RSA"/>
+                                    <arg value="-keysize"/>
+                                    <arg value="2048"/>
+                                    <arg value="-validity"/>
+                                    <arg value="3650"/>
+                                    <arg value="-keystore"/>
+                                    <arg value="${project.build.directory}/key.jks"/>
+                                    <arg value="-storepass"/>
+                                    <arg value="password"/>
+                                    <arg value="-keypass"/>
+                                    <arg value="password"/>
+                                    <arg value="-dname"/>
+                                    <arg value="CN=Shop, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=PL"/>
+                                </exec>
+                                <delete dir="${project.build.directory}/antrun"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
