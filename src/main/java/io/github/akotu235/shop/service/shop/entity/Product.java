@@ -38,7 +38,7 @@ public class Product {
     public Product(@Valid NewProductWriteModel newProduct, Category category) {
         this.name = newProduct.getName();
         this.description = newProduct.getDescription();
-        this.price = newProduct.getPrice();
+        this.price = BigDecimal.valueOf(newProduct.getPrice());
         this.currency = newProduct.getCurrency();
         this.availableQuantity = newProduct.getAvailableQuantity();
         this.photosQuantity = 1;

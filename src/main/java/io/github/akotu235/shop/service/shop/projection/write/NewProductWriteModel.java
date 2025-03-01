@@ -9,7 +9,7 @@ public class NewProductWriteModel {
     private String name;
     private MultipartFile photo;
     private String description;
-    private BigDecimal price;
+    private double price;
     private String currency;
     private int availableQuantity;
     private String category;
@@ -38,11 +38,11 @@ public class NewProductWriteModel {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
