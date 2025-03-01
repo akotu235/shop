@@ -152,10 +152,11 @@
                                       tofile="${project.build.directory}/Shop.jar"
                                       failonerror="false"/>
                                 <copy file="${project.build.directory}/temp-resources/application.yml"
-                                      tofile="${project.build.directory}/application.yml"
+                                      tofile="${project.build.directory}/config/application.yml"
                                       failonerror="false"/>
                                 <delete dir="${project.build.directory}/temp"/>
                                 <delete dir="${project.build.directory}/temp-resources"/>
+                                <mkdir dir="${project.build.directory}/ssl"/>
                                 <exec executable="keytool" failonerror="false">
                                     <arg value="-genkey"/>
                                     <arg value="-alias"/>
@@ -167,7 +168,7 @@
                                     <arg value="-validity"/>
                                     <arg value="3650"/>
                                     <arg value="-keystore"/>
-                                    <arg value="${project.build.directory}/key.jks"/>
+                                    <arg value="${project.build.directory}/ssl/key.jks"/>
                                     <arg value="-storepass"/>
                                     <arg value="password"/>
                                     <arg value="-keypass"/>

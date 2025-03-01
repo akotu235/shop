@@ -61,7 +61,7 @@ server:
     enabled: true
     key-alias: tomcat-shop
     key-password: "password"
-    key-store: file:key.jks
+    key-store: file:ssl/key.jks
     key-store-provider: SUN
     key-store-type: JKS
     key-store-password: "password"
