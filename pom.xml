@@ -120,7 +120,7 @@
                                 <resource>
                                     <directory>${project.basedir}/src/main/resources</directory>
                                     <includes>
-                                        <include>application-example.yml</include>
+                                        <include>application.yml</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -151,7 +151,7 @@
                                 <move file="${project.build.directory}/temp/Shop.jar"
                                       tofile="${project.build.directory}/Shop.jar"
                                       failonerror="false"/>
-                                <copy file="${project.build.directory}/temp-resources/application-example.yml"
+                                <copy file="${project.build.directory}/temp-resources/application.yml"
                                       tofile="${project.build.directory}/application.yml"
                                       failonerror="false"/>
                                 <delete dir="${project.build.directory}/temp"/>
