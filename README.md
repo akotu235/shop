@@ -8,6 +8,10 @@
 
 Dzięki elastycznej, modułowej architekturze, projekt łatwo rozbudować o nowe funkcjonalności, np. integrację z systemami płatności czy narzędziami analitycznymi.
 
+## Demo
+
+Obejrzyj film prezentujący działanie aplikacji: [Zobacz demo na YouTube](https://youtu.be/fai0YzMk6Ws)
+
 ## Spis treści
 
 - [Opis](#opis)
@@ -60,7 +64,7 @@ Projekt **Shop** to kompleksowe rozwiązanie dla prowadzenia sklepu internetoweg
 
 ### Plik konfiguracyjny
 
-Podczas budowania aplikacji generowany jest szablon konfiguracji znajdujący się w `target/config/application.yml`. Prosimy uzupełnić ten plik odpowiednimi ustawieniami. Szablon dostępny w repozytorium ([`src/main/resources/application.yml`](https://github.com/akotu235/shop/blob/master/src/main/resources/application.yml)) może posłużyć jako punkt odniesienia.
+Podczas budowania aplikacji generowany jest szablon konfiguracji znajdujący się w `target/config/application.yml`. Należy uzupełnić ten plik odpowiednimi ustawieniami. Szablon dostępny w repozytorium ([`src/main/resources/application.yml`](https://github.com/akotu235/shop/blob/master/src/main/resources/application.yml)) może posłużyć jako punkt odniesienia.
 
  
 
